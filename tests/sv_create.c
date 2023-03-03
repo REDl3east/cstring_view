@@ -8,6 +8,7 @@ int test_sv_create(string_view sv1, string_view sv2);
 
 int main() {
   string_view sv;
+  const char* cstr;
 
   sv = sv_create("hello world", 11);
   if (!test_sv_create(sv, sv("hello world"))) return 1;
@@ -25,6 +26,27 @@ int main() {
   if (!test_sv_create(sv, sv(""))) return 1;
 
   sv = sv_create("a bunch of random text", 0);
+  if (!test_sv_create(sv, sv_empty)) return 1;
+
+  sv = sv_create_from_cstr("This is a bit of text");
+  if (!test_sv_create(sv, sv("This is a bit of text"))) return 1;
+
+  cstr = "This is a bit of text";
+  sv   = sv_create_from_cstr(cstr);
+  if (!test_sv_create(sv, sv("This is a bit of text"))) return 1;
+
+  cstr = "This    text    ";
+  sv   = sv_create_from_cstr(cstr);
+  if (!test_sv_create(sv, sv("This    text    "))) return 1;
+
+  sv = sv_create_from_cstr("");
+  if (!test_sv_create(sv, sv(""))) return 1;
+
+  sv = sv_create_from_cstr("");
+  if (!test_sv_create(sv, sv_empty)) return 1;
+
+  cstr = "";
+  sv   = sv_create_from_cstr(cstr);
   if (!test_sv_create(sv, sv_empty)) return 1;
 
   return 0;
