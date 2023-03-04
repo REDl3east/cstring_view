@@ -30,7 +30,9 @@ void sv_swap(string_view sv1, string_view sv2);
 string_view sv_substr(string_view sv, sv_index_t pos, sv_index_t count);
 int sv_compare(string_view sv1, string_view sv2);
 int sv_starts_with(string_view sv1, string_view sv2);
+int sv_starts_with_char(string_view sv1, char c);
 int sv_ends_with(string_view sv1, string_view sv2);
+int sv_ends_with_char(string_view sv1, char c);
 sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
@@ -110,6 +112,10 @@ int sv_compare(string_view sv1, string_view sv2) {
   return 1;
 }
 
+int sv_starts_with_char(string_view sv1, char c) {
+  return !sv_is_empty(sv1) && sv_front(sv1) == c;
+}
+
 int sv_starts_with(string_view sv1, string_view sv2) {
   if (sv2.length > sv1.length) return 0;
 
@@ -118,6 +124,10 @@ int sv_starts_with(string_view sv1, string_view sv2) {
   }
 
   return 1;
+}
+
+int sv_ends_with_char(string_view sv1, char c) {
+  return !sv_is_empty(sv1) && sv_back(sv1) == c;
 }
 
 int sv_ends_with(string_view sv1, string_view sv2) {
