@@ -6,30 +6,8 @@
 
 void print_check();
 void print_x();
-
-int test_sv_begin_end_equal(string_view sv) {
-  if (sv_begin(sv) != sv_end(sv)) {
-    print_x();
-    printf("'" sv_fmt "' begin != '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
-    return 0;
-  } else {
-    print_check();
-    printf("'" sv_fmt "' begin == '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
-    return 1;
-  }
-}
-
-int test_sv_begin_end_not_equal(string_view sv) {
-  if (sv_begin(sv) == sv_end(sv)) {
-    print_x();
-    printf("'" sv_fmt "' begin == '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
-    return 0;
-  } else {
-    print_check();
-    printf("'" sv_fmt "' begin != '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
-    return 1;
-  }
-}
+int test_sv_begin_end_equal(string_view sv);
+int test_sv_begin_end_not_equal(string_view sv);
 
 int main() {
   string_view sv;
@@ -72,10 +50,34 @@ int main() {
   return 0;
 }
 
+int test_sv_begin_end_equal(string_view sv) {
+  if (sv_begin(sv) != sv_end(sv)) {
+    print_x();
+    printf("'" sv_fmt "' begin != '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
+    return 0;
+  } else {
+    print_check();
+    printf("'" sv_fmt "' begin == '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
+    return 1;
+  }
+}
+
+int test_sv_begin_end_not_equal(string_view sv) {
+  if (sv_begin(sv) == sv_end(sv)) {
+    print_x();
+    printf("'" sv_fmt "' begin == '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
+    return 0;
+  } else {
+    print_check();
+    printf("'" sv_fmt "' begin != '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
+    return 1;
+  }
+}
+
 void print_check() {
   printf("[\xE2\x9C\x93] ");
 }
 
 void print_x() {
-  printf("[X] ");
+  printf("[x] ");
 }

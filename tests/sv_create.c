@@ -67,7 +67,7 @@ void print_check() {
 }
 
 void print_x() {
-  printf("[X] ");
+  printf("[x] ");
 }
 
 int test_sv_create(string_view sv1, string_view sv2) {
