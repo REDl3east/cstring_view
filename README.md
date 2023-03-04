@@ -2,7 +2,7 @@
 
 ## Overview
 
-A library that is very similar to C++17's std::string_view, but written in C. All functions are
+A library that is very similar to C++17 std::string_view, but written in C. All functions are
 
 ## Building Tests and Examples
 ```bash
