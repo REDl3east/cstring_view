@@ -152,13 +152,13 @@ sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos) {
 }
 
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos) {
-  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
+  if (sv_is_empty(sv2) && sv_is_empty(sv1)) return 0;
   if (sv2.length > sv1.length) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = 0;
 
-  for (int i = pos; i < (int)sv2.length; i++) {
-    string_view v = sv_substr(sv1, pos + i, SV_NPOS);
+  for (int i = pos; i < (int)sv1.length; i++) {
+    string_view v = sv_substr(sv1, i, sv2.length);
     if (sv_starts_with(v, sv2)) return i;
   }
 
@@ -178,7 +178,7 @@ sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos) {
 }
 
 sv_index_t sv_rfind(string_view sv1, string_view sv2, sv_index_t pos) {
-  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
+  if (sv_is_empty(sv2) && sv_is_empty(sv1)) return 0;
   if (sv2.length > sv1.length) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv1.length - 1;
