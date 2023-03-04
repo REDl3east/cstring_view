@@ -96,7 +96,7 @@ void sv_swap(string_view sv1, string_view sv2) {
 }
 
 string_view sv_substr(string_view sv, sv_index_t pos, sv_index_t count) {
-  if (pos == SV_NPOS) count = sv.length - 1;
+  if (count == SV_NPOS) count = sv.length;
   return sv_create(sv.data + pos, count < sv.length - pos ? count : sv.length - pos);
 }
 
