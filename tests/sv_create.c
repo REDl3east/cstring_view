@@ -1,6 +1,8 @@
 #include "sv.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void print_check();
 void print_x();
@@ -48,6 +50,14 @@ int main() {
   cstr = "";
   sv   = sv_create_from_cstr(cstr);
   if (!test_sv_create(sv, sv_empty)) return 1;
+
+  char* dynstr1 = malloc(sizeof(char) * 16);
+  strcpy(dynstr1, "Dalton Overmyer");
+  sv = sv_create(dynstr1, 6);
+  if (!test_sv_create(sv, sv("Dalton"))) return 1;
+  sv = sv_create(dynstr1, 3);
+  if (!test_sv_create(sv, sv("Dal"))) return 1;
+  free(dynstr1);
 
   return 0;
 }
