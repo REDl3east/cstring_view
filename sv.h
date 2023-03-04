@@ -23,8 +23,6 @@ const char* sv_end(string_view sv);
 char sv_at(string_view sv, sv_index_t index);
 char sv_front(string_view sv);
 char sv_back(string_view sv);
-sv_index_t sv_size(string_view sv);
-sv_index_t sv_length(string_view sv);
 int sv_is_empty(string_view sv);
 string_view sv_remove_prefix(string_view sv, sv_index_t n);
 string_view sv_remove_suffix(string_view sv, sv_index_t n);
@@ -77,14 +75,6 @@ char sv_front(string_view sv) {
 
 char sv_back(string_view sv) {
   return sv_end(sv)[0];
-}
-
-sv_index_t sv_size(string_view sv) {
-  return sv.length;
-}
-
-sv_index_t sv_length(string_view sv) {
-  return sv.length;
 }
 
 int sv_is_empty(string_view sv) {
