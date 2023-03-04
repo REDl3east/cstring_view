@@ -7,6 +7,37 @@
 void print_check();
 void print_x();
 
+int test_at(string_view sv, sv_index_t index, char expected);
+int test_front(string_view sv, char expected);
+int test_back(string_view sv, char expected);
+
+int main() {
+  string_view sv;
+
+  sv = sv("What is some random text?");
+  if (!test_at(sv, 0, 'W')) return 1;
+  if (!test_at(sv, 1, 'h')) return 1;
+  if (!test_at(sv, 2, 'a')) return 1;
+  if (!test_at(sv, 3, 't')) return 1;
+  if (!test_at(sv, 24, '?')) return 1;
+  if (!test_at(sv, 20, 't')) return 1;
+  if (!test_front(sv, 'W')) return 1;
+  if (!test_back(sv, '?')) return 1;
+  sv = sv_create_from_cstr("!dZhZxZZbZZxZxZZZZxZZtnxrx");
+  if (!test_at(sv, 5, 'x')) return 1;
+  if (!test_at(sv, 11, 'x')) return 1;
+  if (!test_at(sv, 18, 'x')) return 1;
+  if (!test_at(sv, 25, 'x')) return 1;
+  if (!test_front(sv, '!')) return 1;
+  if (!test_back(sv, 'x')) return 1;
+
+  sv = sv_create("hello there person", 6);
+  if (!test_at(sv, 4, 'o')) return 1;
+  if (!test_front(sv, 'h')) return 1;
+  if (!test_back(sv, ' ')) return 1;
+  return 0;
+}
+
 int test_at(string_view sv, sv_index_t index, char expected) {
   if (sv_at(sv, index) == expected) {
     print_check();
@@ -41,33 +72,6 @@ int test_back(string_view sv, char expected) {
     printf("'" sv_fmt "' back != '%c'\n", sv_arg(sv), expected);
     return 0;
   }
-}
-
-int main() {
-  string_view sv;
-
-  sv = sv("What is some random text?");
-  if (!test_at(sv, 0, 'W')) return 1;
-  if (!test_at(sv, 1, 'h')) return 1;
-  if (!test_at(sv, 2, 'a')) return 1;
-  if (!test_at(sv, 3, 't')) return 1;
-  if (!test_at(sv, 24, '?')) return 1;
-  if (!test_at(sv, 20, 't')) return 1;
-  if (!test_front(sv, 'W')) return 1;
-  if (!test_back(sv, '?')) return 1;
-  sv = sv_create_from_cstr("!dZhZxZZbZZxZxZZZZxZZtnxrx");
-  if (!test_at(sv, 5, 'x')) return 1;
-  if (!test_at(sv, 11, 'x')) return 1;
-  if (!test_at(sv, 18, 'x')) return 1;
-  if (!test_at(sv, 25, 'x')) return 1;
-  if (!test_front(sv, '!')) return 1;
-  if (!test_back(sv, 'x')) return 1;
-
-  sv = sv_create("hello there person", 6);
-  if (!test_at(sv, 4, 'o')) return 1;
-  if (!test_front(sv, 'h')) return 1;
-  if (!test_back(sv, ' ')) return 1;
-  return 0;
 }
 
 void print_check() {
