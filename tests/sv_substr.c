@@ -32,6 +32,9 @@ int main() {
   if(!test_sv_substr(sv("5 + 2 / 88"), 2, 1, sv("+"))) return 1;
   if(!test_sv_substr(sv("5 + 2 / 88"), 2, 0, sv(""))) return 1;
   if(!test_sv_substr(sv("5 + 2 / 88"), 8, SV_NPOS, sv("88"))) return 1;
+  
+  // UB
+  // if(!test_sv_substr(sv(""), 0, 2, sv("88"))) return 1;
 
   return 0;
 }
