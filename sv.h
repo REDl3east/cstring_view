@@ -337,13 +337,6 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
   return sv_remove_suffix(sv1, sv1.length - index - 1);
 }
 
-sv_index_t sv_cstrlen(const char* str) {
-  const char* s;
-  for (s = str; *s; ++s)
-    ;
-  return (s - str);
-}
-
 char* sv_strdup(string_view sv) {
   char* str = malloc(sv.length + 1);
   if (!str) return NULL;
