@@ -16,6 +16,10 @@ typedef struct string_view {
   sv_index_t length;
 } string_view;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 string_view sv_create(const char* data, sv_index_t length);
 string_view sv_create_from_cstr(const char* data);
 const char* sv_begin(string_view sv);
@@ -56,10 +60,19 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
 
 char* sv_strdup(string_view sv);
 
+#ifdef __cplusplus
+}
+#endif
+
 #ifdef SV_IMPLEMENTATION
 
-  #include <stdlib.h>
-  #include <string.h>
+  #ifdef __cplusplus
+    #include <cstdlib>
+    #include <cstring>
+  #else
+    #include <stdlib.h>
+    #include <string.h>
+  #endif
 
 string_view sv_create(const char* data, sv_index_t length) {
   string_view sv = {
