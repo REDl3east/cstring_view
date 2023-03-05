@@ -48,6 +48,10 @@ sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos
 sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_cstrlen(const char* str);
+char* sv_strdup(string_view sv);
+
+#include <stdlib.h>
+#include <string.h>
 
 string_view sv_create(const char* data, sv_index_t length) {
   string_view sv = {
@@ -142,7 +146,7 @@ int sv_ends_with(string_view sv1, string_view sv2) {
   return 1;
 }
 
-int sv_contains(string_view sv1, string_view sv2){
+int sv_contains(string_view sv1, string_view sv2) {
   return sv_find(sv1, sv2, 0) != SV_NPOS;
 }
 
@@ -271,7 +275,7 @@ sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos) {
 
 sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) && sv_is_empty(sv1)) return SV_NPOS;
-  if(pos == 0) return SV_NPOS;
+  if (pos == 0) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv1.length - 1;
 
@@ -293,6 +297,14 @@ sv_index_t sv_cstrlen(const char* str) {
   for (s = str; *s; ++s)
     ;
   return (s - str);
+}
+
+char* sv_strdup(string_view sv) {
+  char* str = malloc(sv.length + 1);
+  if (!str) return NULL;
+  memcpy(str, sv.data, sv.length + 1);
+  str[sv.length] = '\0';
+  return str;
 }
 
 #endif
