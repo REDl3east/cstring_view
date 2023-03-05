@@ -37,6 +37,7 @@ sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_rfind(string_view sv1, string_view sv2, sv_index_t pos);
+
 sv_index_t sv_find_first_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos);
@@ -198,8 +199,6 @@ sv_index_t sv_find_first_of_char(string_view sv, char c, sv_index_t pos) {
 sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
 
-  if (pos == SV_NPOS) pos = 0;
-
   for (int i = pos; i < (int)sv1.length; i++) {
     for (int j = 0; j < (int)sv2.length; j++) {
       if (sv1.data[i] == sv2.data[j]) return i;
@@ -230,8 +229,6 @@ sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos) {
 sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos) {
   if (sv_is_empty(sv)) return SV_NPOS;
 
-  if (pos == SV_NPOS) pos = 0;
-
   for (int i = pos; i < (int)sv.length; i++) {
     if (sv.data[i] != c) return i;
   }
@@ -240,10 +237,9 @@ sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos) {
 }
 
 sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos) {
-  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
-
-  if (pos == SV_NPOS) pos = 0;
-
+  if (sv_is_empty(sv1) && sv_is_empty(sv2)) return 0;
+  if (sv_is_empty(sv2)) return 0;
+  
   for (int i = pos; i < (int)sv1.length; i++) {
     int j;
     for (j = 0; j < (int)sv2.length; j++) {
@@ -257,8 +253,6 @@ sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos
 
 sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos) {
   if (sv_is_empty(sv)) return SV_NPOS;
-
-  if (pos == SV_NPOS) pos = sv.length - 1;
 
   for (int i = pos; i >= 0; i--) {
     if (sv.data[i] != c) return i;
