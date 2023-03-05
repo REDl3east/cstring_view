@@ -17,6 +17,10 @@ int main() {
 
   sv = sv_trim_whitespace(sv("       There goes my hero\n\n\n\n\n\n"));
   printf("'" sv_fmt "'\n", sv_arg(sv));
+
+  sv = sv_trim_whitespace(sv("There goes my hero"));
+  printf("'" sv_fmt "'\n", sv_arg(sv));
+
 }
 
 string_view sv_trim_left_whitesapce(string_view sv) {
