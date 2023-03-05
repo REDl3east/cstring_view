@@ -25,7 +25,7 @@ The library is header only, so you can easily add it to your project. Copy and p
 
 ```c++
    // Do this:
-      #define STB_IMAGE_IMPLEMENTATION
+      #define SV_IMPLEMENTATION
    // before you include this file in *one* C or C++ file to create the implementation.
    
    // i.e. it should look like this:
