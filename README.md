@@ -13,9 +13,8 @@ make
 ```
 
 ## Running Tests
-Building from previous step will generate two directories, tests and examples. This is where the binaries are stored. Running the examples is as simple as running each outputted binary from the command line. You can easily run the tests with the `make` or `ctest` command like so:
+Building from previous step will generate two directories, tests and examples. This is where the binaries are stored. Running the examples is as simple as running each outputted binary from the command line or you can easily run the tests with `ctest` command like so:
 ```bash
-make test                 # or
 ctest --output-on-failure
 ```
 
