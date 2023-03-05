@@ -34,6 +34,7 @@ int sv_starts_with_char(string_view sv1, char c);
 int sv_ends_with(string_view sv1, string_view sv2);
 int sv_ends_with_char(string_view sv1, char c);
 int sv_contains(string_view sv1, string_view sv2);
+
 sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
@@ -47,6 +48,12 @@ sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos);
+
+string_view sv_consume_until_first_of(string_view sv1, string_view sv2);
+string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2);
+string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
+string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
+
 sv_index_t sv_cstrlen(const char* str);
 char* sv_strdup(string_view sv);
 
@@ -290,6 +297,30 @@ sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos)
   }
 
   return SV_NPOS;
+}
+
+string_view sv_consume_until_first_of(string_view sv1, string_view sv2) {
+  sv_index_t index = sv_find_first_of(sv1, sv2, 0);
+  if (index == SV_NPOS) return sv_empty;
+  return sv_remove_prefix(sv1, index);
+}
+
+string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2) {
+  sv_index_t index = sv_find_first_not_of(sv1, sv2, 0);
+  if (index == SV_NPOS) return sv_empty;
+  return sv_remove_prefix(sv1, index);
+}
+
+string_view sv_consume_until_last_of(string_view sv1, string_view sv2) {
+  sv_index_t index = sv_find_last_of(sv1, sv2, SV_NPOS);
+  if (index == SV_NPOS) return sv_empty;
+  return sv_remove_suffix(sv1, sv1.length - index - 1);
+}
+
+string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
+  sv_index_t index = sv_find_last_not_of(sv1, sv2, SV_NPOS);
+  if (index == SV_NPOS) return sv_empty;
+  return sv_remove_suffix(sv1, sv1.length - index - 1);
 }
 
 sv_index_t sv_cstrlen(const char* str) {
