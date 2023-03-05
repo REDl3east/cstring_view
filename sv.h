@@ -54,11 +54,12 @@ string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
 
-sv_index_t sv_cstrlen(const char* str);
 char* sv_strdup(string_view sv);
 
-#include <stdlib.h>
-#include <string.h>
+#ifdef SV_IMPLEMENTATION
+
+  #include <stdlib.h>
+  #include <string.h>
 
 string_view sv_create(const char* data, sv_index_t length) {
   string_view sv = {
@@ -69,7 +70,7 @@ string_view sv_create(const char* data, sv_index_t length) {
 }
 
 string_view sv_create_from_cstr(const char* data) {
-  return sv_create(data, sv_cstrlen(data));
+  return sv_create(data, strlen(data));
 }
 
 const char* sv_begin(string_view sv) {
@@ -337,5 +338,7 @@ char* sv_strdup(string_view sv) {
   str[sv.length] = '\0';
   return str;
 }
+
+#endif
 
 #endif
