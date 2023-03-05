@@ -20,7 +20,7 @@ ctest --output-on-failure
 
 The tests can be found in the [tests](tests) directory and the examples can be found in the [examples](examples) directory.
 
-## Including this library in your project
+## Including this library into your project
 The library is header only, so you can easily add it to your project. Copy and paste [sv.h](sv.h) into your project. You must also do:
 
 ```c++
