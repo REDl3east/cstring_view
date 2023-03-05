@@ -18,7 +18,7 @@ Building from previous step will generate two directories, tests and examples. T
 ctest --output-on-failure
 ```
 
+The tests can be found in the [tests/](tests) directory and the examples can be found in the [examples/](examples) directory.
 
-## Examples
-Look in the [examples/](examples) directory.
+
 
