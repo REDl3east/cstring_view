@@ -12,6 +12,9 @@ int main() {
   sv = sv_trim_whitespace(sv(""));
   printf("'" sv_fmt "'\n", sv_arg(sv));
 
+  sv = sv_trim_whitespace(sv("    \n\t     "));
+  printf("'" sv_fmt "'\n", sv_arg(sv));
+
   sv = sv_trim_whitespace(sv("   \t\n   Dalton Overmyer  \r\v  "));
   printf("'" sv_fmt "'\n", sv_arg(sv));
 
