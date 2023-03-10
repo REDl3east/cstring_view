@@ -72,12 +72,10 @@ char* sv_strdup(string_view sv);
     #include <cstdlib>
     #include <cstring>
     #include <cstdint>
-    #include <climits>
   #else
     #include <stdlib.h>
     #include <string.h>
     #include <stdint.h>
-    #include <limits.h>
   #endif
 
 string_view sv_create(const char* data, sv_index_t length) {
@@ -345,6 +343,7 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
 
 int sv_parse_int(string_view sv, int* value) {
   if(sv_is_empty(sv)) return 0;
+  if (sv.length > 10) return 0;
 
   int negative = 0;
 
@@ -358,10 +357,7 @@ int sv_parse_int(string_view sv, int* value) {
 
   uint64_t tmp = 0;
   for (size_t i = 0; i < sv.length; ++i) {
-    uint64_t a = tmp * 10;
-    uint64_t b = (uint64_t)sv.data[i] - '0';
-    if (a > INT_MAX - b) return 0; // overflow
-    tmp = a + b;
+    tmp = tmp * 10 + (uint64_t)sv.data[i] - '0';
   }
 
   *value = tmp;
