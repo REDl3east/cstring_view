@@ -58,6 +58,8 @@ string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
 
+int sv_parse_int(string_view sv, int* value);
+
 char* sv_strdup(string_view sv);
 
 #ifdef __cplusplus
@@ -69,9 +71,11 @@ char* sv_strdup(string_view sv);
   #ifdef __cplusplus
     #include <cstdlib>
     #include <cstring>
+    #include <cstdint>
   #else
     #include <stdlib.h>
     #include <string.h>
+    #include <stdint.h>
   #endif
 
 string_view sv_create(const char* data, sv_index_t length) {
@@ -335,6 +339,34 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
   sv_index_t index = sv_find_last_not_of(sv1, sv2, SV_NPOS);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_suffix(sv1, sv1.length - index - 1);
+}
+
+int sv_parse_int(string_view sv, int* value) {
+  if(sv_is_empty(sv)) return 0;
+  if (sv.length > 12) return 0;
+
+  int negative = 0;
+
+  if(sv_front(sv) == '-'){
+    negative = 1;
+    sv = sv_remove_prefix(sv, 1);
+    if(sv_is_empty(sv)) return 0;
+  }
+
+  if (sv_find_first_not_of(sv, sv("0123456789"), 0) != SV_NPOS) return 0;
+
+  uint64_t tmp = 0;
+  for (size_t i = 0; i < sv.length; ++i) {
+    // TODO: check for overflow
+    tmp = tmp * 10 + (uint64_t)sv.data[i] - '0';
+  }
+
+  *value = tmp;
+  if(negative){
+    *value *= -1;
+  }
+
+  return 1;
 }
 
 char* sv_strdup(string_view sv) {
