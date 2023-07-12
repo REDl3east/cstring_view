@@ -16,6 +16,8 @@ typedef struct string_view {
   sv_index_t length;
 } string_view;
 
+typedef int (*sv_for_split_callback)(string_view, void*);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,6 +59,9 @@ string_view sv_consume_until_first_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
+
+string_view sv_split_next(string_view sv, string_view by, string_view* token);
+int sv_for_split_by(string_view sv, string_view by, sv_for_split_callback callback, void* arg);
 
 int sv_parse_int(string_view sv, int* value);
 char* sv_strdup(string_view sv);
@@ -341,6 +346,38 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
   sv_index_t index = sv_find_last_not_of(sv1, sv2, SV_NPOS);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_suffix(sv1, sv1.length - index - 1);
+}
+
+string_view sv_split_next(string_view sv, string_view by, string_view* token) {
+  *token = sv_substr(sv, 0, sv_find_first_of(sv, by, 0));
+
+  if (sv_compare(sv, *token)) return sv_empty;
+
+  while (sv_is_empty(*token)) {
+    sv     = sv_remove_prefix(sv, 1);
+    *token = sv_substr(sv, 0, sv_find_first_of(sv, by, 0));
+    if (sv_compare(sv, *token)) return sv_empty;
+  }
+
+  return sv_remove_prefix(sv, token->length);
+}
+
+int sv_for_split_by(string_view sv, string_view by, sv_for_split_callback callback, void* arg) {
+  string_view token;
+
+  sv = sv_split_next(sv, by, &token);
+  while (!sv_is_empty(sv)) {
+    int ret = callback(token, arg);
+    if (!ret) return ret;
+    sv = sv_split_next(sv, by, &token);
+  }
+
+  if (!sv_is_empty(token)) { // one last token was consumed
+    int ret = callback(token, arg);
+    if (!ret) return ret;
+  }
+
+  return 1;
 }
 
 int sv_parse_int(string_view sv, int* value) {
