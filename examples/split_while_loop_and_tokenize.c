@@ -37,11 +37,9 @@ int main() {
   }
   printf("\n");
 
-  input = sv(" There are 22 men on board in 1924");
+  input = sv(" There are 22 men on board in 1924\nI am 27 years old in 2023");
 
-  token_list list;
-  list.head = NULL;
-  list.tail = NULL;
+  token_list list = {0};
   if (!sv_for_split_by(input, sv(" \n"), sv_tokenize, &list)) {
     printf("Failed to tokenized!\n");
     return 1;
@@ -49,7 +47,7 @@ int main() {
 
   token* current = list.head;
   while (current != NULL) {
-    printf("(str: " sv_fmt ", type: %s)\n", sv_arg(current->str), current->type == NUMBER ? "NUMBER" : "STRING");
+    printf("(str: '" sv_fmt "', type: %s)\n", sv_arg(current->str), current->type == NUMBER ? "NUMBER" : "STRING");
     current = current->next;
   }
   printf("\n");
