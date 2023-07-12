@@ -408,7 +408,7 @@ int sv_parse_int(string_view sv, int* value) {
 }
 
 char* sv_strdup(string_view sv) {
-  char* str = malloc(sv.length + 1);
+  char* str = (char*)malloc(sv.length + 1);
   if (!str) return NULL;
   memcpy(str, sv.data, sv.length + 1);
   str[sv.length] = '\0';
