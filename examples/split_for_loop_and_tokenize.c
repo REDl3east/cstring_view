@@ -24,16 +24,10 @@ typedef struct token_list {
 int sv_tokenize(string_view sv, void* arg);
 
 int main() {
-  // loop through tokens with while loop
+  // loop through tokens with for loop
   string_view input = sv(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
 
-  string_view tok;
-  string_view sv = sv_split_next(input, sv(" \n"), &tok);
-  while (!sv_is_empty(sv)) {
-    printf("'" sv_fmt "' ", sv_arg(tok));
-    sv = sv_split_next(sv, sv(" \n"), &tok);
-  }
-  if (!sv_is_empty(tok)) { // one last token was consumed
+  SV_FOR_SPLIT(tok, input, sv(" \n")) {
     printf("'" sv_fmt "' ", sv_arg(tok));
   }
   printf("\n");
@@ -43,7 +37,7 @@ int main() {
   input = sv(" There are 22 men on board in 1924\nI am 27 years old in 2023");
 
   token_list list = {0};
-  if (!sv_for_split_by(input, sv(" \n"), sv_tokenize, &list)) {
+  if (!sv_for_split(input, sv(" \n"), sv_tokenize, &list)) {
     printf("Failed to tokenized!\n");
     return 1;
   }
