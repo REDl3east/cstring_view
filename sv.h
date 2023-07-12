@@ -59,8 +59,8 @@ string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
 string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
 
 int sv_parse_int(string_view sv, int* value);
-
 char* sv_strdup(string_view sv);
+int sv_read_file(const char* filename, string_view* sv);
 
 #ifdef __cplusplus
 }
@@ -69,13 +69,15 @@ char* sv_strdup(string_view sv);
 #ifdef SV_IMPLEMENTATION
 
   #ifdef __cplusplus
+    #include <cstdint>
+    #include <cstdio>
     #include <cstdlib>
     #include <cstring>
-    #include <cstdint>
   #else
+    #include <stdint.h>
+    #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include <stdint.h>
   #endif
 
 string_view sv_create(const char* data, sv_index_t length) {
@@ -342,15 +344,15 @@ string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
 }
 
 int sv_parse_int(string_view sv, int* value) {
-  if(sv_is_empty(sv)) return 0;
+  if (sv_is_empty(sv)) return 0;
   if (sv.length > 10) return 0;
 
   int negative = 0;
 
-  if(sv_front(sv) == '-'){
+  if (sv_front(sv) == '-') {
     negative = 1;
-    sv = sv_remove_prefix(sv, 1);
-    if(sv_is_empty(sv)) return 0;
+    sv       = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) return 0;
   }
 
   if (sv_find_first_not_of(sv, sv("0123456789"), 0) != SV_NPOS) return 0;
@@ -361,7 +363,7 @@ int sv_parse_int(string_view sv, int* value) {
   }
 
   *value = tmp;
-  if(negative){
+  if (negative) {
     *value *= -1;
   }
 
@@ -374,6 +376,34 @@ char* sv_strdup(string_view sv) {
   memcpy(str, sv.data, sv.length + 1);
   str[sv.length] = '\0';
   return str;
+}
+
+int sv_read_file(const char* filename, string_view* sv) {
+  FILE* fh = fopen(filename, "rb");
+  if (fh == NULL) {
+    return 0;
+  }
+
+  fseek(fh, 0L, SEEK_END);
+  sv->length = ftell(fh);
+  rewind(fh);
+  char* b = (char*)malloc(sv->length);
+
+  if (b == NULL) {
+    fclose(fh);
+    return 0;
+  }
+
+  if (fread(b, sv->length, 1, fh) != 1) {
+    free(b);
+    fclose(fh);
+    return 0;
+  }
+
+  sv->data = b;
+
+  fclose(fh);
+  return 1;
 }
 
 #endif
