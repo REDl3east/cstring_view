@@ -24,18 +24,21 @@ typedef struct token_list {
 int sv_tokenize(string_view sv, void* arg);
 
 int main() {
+  // loop through tokens with while loop
   string_view input = sv(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
 
-  string_view t;
-  string_view sv = sv_split_next(input, sv(" \n"), &t);
+  string_view tok;
+  string_view sv = sv_split_next(input, sv(" \n"), &tok);
   while (!sv_is_empty(sv)) {
-    printf("'" sv_fmt "' ", sv_arg(t));
-    sv = sv_split_next(sv, sv(" \n"), &t);
+    printf("'" sv_fmt "' ", sv_arg(tok));
+    sv = sv_split_next(sv, sv(" \n"), &tok);
   }
-  if (!sv_is_empty(t)) { // one last token was consumed
-    printf("'" sv_fmt "' ", sv_arg(t));
+  if (!sv_is_empty(tok)) { // one last token was consumed
+    printf("'" sv_fmt "' ", sv_arg(tok));
   }
   printf("\n");
+
+  // loop through tokens with callback and fill up a list with tokens
 
   input = sv(" There are 22 men on board in 1924\nI am 27 years old in 2023");
 
