@@ -3,40 +3,9 @@
 
 #include <stdio.h>
 
+int test_sv_parse_int(string_view input, int will_fail, int expected);
 void print_check();
 void print_x();
-
-int test_sv_parse_int(string_view input, int will_fail, int expected) {
-  int inputi;
-  if (!sv_parse_int(input, &inputi)) {
-    if (will_fail) {
-      print_check();
-      printf("Expected parse failure: '" sv_fmt "'\n", sv_arg(input));
-      return 1;
-    } else {
-      print_x();
-      printf("Unexpected parse failure: '" sv_fmt "'\n", sv_arg(input));
-      return 0;
-    }
-  }
-
-  if (will_fail) {
-    print_x();
-    printf("Expected parse to fail: '" sv_fmt "' == %d\n", sv_arg(input), inputi);
-    return 0;
-  }
-
-  if (expected == inputi) {
-    print_check();
-    printf("'" sv_fmt "' == %d\n", sv_arg(input), inputi);
-    return 1;
-  }
-
-  print_check();
-  printf("'" sv_fmt "' != %d\n", sv_arg(input), inputi);
-
-  return 0;
-}
 
 #define TEST_PARSE_INT(num)                             \
   do {                                                  \
@@ -77,6 +46,38 @@ int main() {
   TEST_PARSE_INT_FAIL("10000000000000000");
   TEST_PARSE_INT_FAIL("-12345646484131646165165184");
   TEST_PARSE_INT_FAIL("-12345646484131646164");
+
+  return 0;
+}
+
+int test_sv_parse_int(string_view input, int will_fail, int expected) {
+  int inputi;
+  if (!sv_parse_int(input, &inputi)) {
+    if (will_fail) {
+      print_check();
+      printf("Expected parse failure: '" sv_fmt "'\n", sv_arg(input));
+      return 1;
+    } else {
+      print_x();
+      printf("Unexpected parse failure: '" sv_fmt "'\n", sv_arg(input));
+      return 0;
+    }
+  }
+
+  if (will_fail) {
+    print_x();
+    printf("Expected parse to fail: '" sv_fmt "' == %d\n", sv_arg(input), inputi);
+    return 0;
+  }
+
+  if (expected == inputi) {
+    print_check();
+    printf("'" sv_fmt "' == %d\n", sv_arg(input), inputi);
+    return 1;
+  }
+
+  print_check();
+  printf("'" sv_fmt "' != %d\n", sv_arg(input), inputi);
 
   return 0;
 }
