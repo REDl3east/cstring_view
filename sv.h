@@ -78,11 +78,13 @@ void sv_read_file_free(string_view sv);
 #ifdef SV_IMPLEMENTATION
 
   #ifdef __cplusplus
+    #include <climits>
     #include <cstdint>
     #include <cstdio>
     #include <cstdlib>
     #include <cstring>
   #else
+    #include <limits.h>
     #include <stdint.h>
     #include <stdio.h>
     #include <stdlib.h>
@@ -358,7 +360,7 @@ string_view sv_split_next(string_view input, string_view delim, string_view* tok
   if (sv_compare(input, *token)) return sv_empty;
 
   while (sv_is_empty(*token)) {
-    input     = sv_remove_prefix(input, 1);
+    input  = sv_remove_prefix(input, 1);
     *token = sv_substr(input, 0, sv_find_first_of(input, delim, 0));
     if (sv_compare(input, *token)) return sv_empty;
   }
@@ -376,7 +378,7 @@ int sv_for_split(string_view input, string_view delim, sv_for_split_callback cal
 
 int sv_parse_int(string_view sv, int* value) {
   if (sv_is_empty(sv)) return 0;
-  if (sv.length > 10) return 0;
+  if (sv.length > 11) return 0; // An int can hold up to 10 digits (+1 for potential '-' sign)
 
   int negative = 0;
 
@@ -388,15 +390,37 @@ int sv_parse_int(string_view sv, int* value) {
 
   if (sv_find_first_not_of(sv, sv("0123456789"), 0) != SV_NPOS) return 0;
 
-  uint64_t tmp = 0;
-  for (size_t i = 0; i < sv.length; ++i) {
-    tmp = tmp * 10 + (uint64_t)sv.data[i] - '0';
+  int tmp = 0;
+
+  // Parse with overflow checking if the number has 10 digits
+  if (sv.length == 10) {
+    int limit       = (negative ? -(INT_MIN / 10) : INT_MAX / 10);
+    int limit_digit = (negative ? -(INT_MIN % 10) : INT_MAX % 10);
+
+    size_t i = 0;
+
+    // Parse without overflow checking until the 9th digit.
+    for (; i < sv.length && i < 9; ++i) {
+      tmp = tmp * 10 + (sv.data[i] - '0');
+    }
+
+    // Parse the remaining digits with overflow checking.
+    for (; i < sv.length; ++i) {
+      int digit = sv.data[i] - '0';
+
+      // Check for overflow.
+      if (tmp > limit || (tmp == limit && digit > limit_digit))
+        return 0; // Overflow would occur if we added this digit.
+
+      tmp = tmp * 10 + digit;
+    }
+  } else { // No overflow possible
+    for (size_t i = 0; i < sv.length; ++i) {
+      tmp = tmp * 10 + (sv.data[i] - '0');
+    }
   }
 
-  *value = tmp;
-  if (negative) {
-    *value *= -1;
-  }
+  *value = negative ? -tmp : tmp;
 
   return 1;
 }
@@ -437,7 +461,7 @@ int sv_read_file(const char* filename, string_view* sv) {
   return 1;
 }
 
-void sv_read_file_free(string_view sv){
+void sv_read_file_free(string_view sv) {
   free((char*)sv.data);
 }
 
