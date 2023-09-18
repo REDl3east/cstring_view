@@ -66,6 +66,7 @@ int sv_for_split(string_view input, string_view delim, sv_for_split_callback cal
 int sv_parse_int(string_view sv, int* value);
 char* sv_strdup(string_view sv);
 int sv_read_file(const char* filename, string_view* sv);
+void sv_read_file_free(string_view sv);
 
 #define SV_FOR_SPLIT(token, input, delim) \
   for (string_view token, sv = sv_split_next(input, delim, &token); !sv_is_empty(sv) || !sv_is_empty(token); sv = sv_split_next(sv, delim, &token))
@@ -434,6 +435,10 @@ int sv_read_file(const char* filename, string_view* sv) {
 
   fclose(fh);
   return 1;
+}
+
+void sv_read_file_free(string_view sv){
+  free((char*)sv.data);
 }
 
 #endif

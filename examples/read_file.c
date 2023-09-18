@@ -15,7 +15,7 @@ int main() {
   printf(sv_fmt"\n", sv_arg(sv));
 
   // must free the data allocated by sv_read_file
-  free((void*)sv.data);
+  sv_read_file_free(sv);
 
   return 0;
 }
