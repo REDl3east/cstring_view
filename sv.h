@@ -442,13 +442,20 @@ int sv_read_file(const char* filename, string_view* sv) {
   fseek(fh, 0L, SEEK_END);
   sv->length = ftell(fh);
   rewind(fh);
+
+  if (sv->length == 0) {
+    errno = ENODATA;
+    fclose(fh);
+    return 0;
+  }
+  
   char* b = (char*)malloc(sv->length);
 
   if (b == NULL) {
     fclose(fh);
     return 0;
   }
-
+  
   if (fread(b, sv->length, 1, fh) != 1) {
     free(b);
     fclose(fh);
