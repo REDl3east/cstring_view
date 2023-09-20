@@ -43,11 +43,17 @@ int sv_contains(string_view sv1, string_view sv2);
 
 sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
+
 sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_rfind(string_view sv1, string_view sv2, sv_index_t pos);
 
 sv_index_t sv_find_first_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos);
+
+// same as sv_find_first_of, but return the char found and stores the index in
+// index pointer. returns '\0' when not found
+char sv_find_first_of_switch(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t* index);
+
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos);
@@ -68,8 +74,10 @@ char* sv_strdup(string_view sv);
 int sv_read_file(const char* filename, string_view* sv);
 void sv_read_file_free(string_view sv);
 
-#define SV_FOR_SPLIT(token, input, delim) \
-  for (string_view token, sv = sv_split_next(input, delim, &token); !sv_is_empty(sv) || !sv_is_empty(token); sv = sv_split_next(sv, delim, &token))
+#define SV_FOR_SPLIT(token, input, delim)                           \
+  for (string_view token, sv = sv_split_next(input, delim, &token); \
+       !sv_is_empty(sv) || !sv_is_empty(token);                     \
+       sv = sv_split_next(sv, delim, &token))
 
 #ifdef __cplusplus
 }
@@ -103,29 +111,17 @@ string_view sv_create_from_cstr(const char* data) {
   return sv_create(data, strlen(data));
 }
 
-const char* sv_begin(string_view sv) {
-  return sv.data;
-}
+const char* sv_begin(string_view sv) { return sv.data; }
 
-const char* sv_end(string_view sv) {
-  return sv.data + (sv.length - 1);
-}
+const char* sv_end(string_view sv) { return sv.data + (sv.length - 1); }
 
-char sv_at(string_view sv, sv_index_t index) {
-  return sv.data[index];
-}
+char sv_at(string_view sv, sv_index_t index) { return sv.data[index]; }
 
-char sv_front(string_view sv) {
-  return sv_begin(sv)[0];
-}
+char sv_front(string_view sv) { return sv_begin(sv)[0]; }
 
-char sv_back(string_view sv) {
-  return sv_end(sv)[0];
-}
+char sv_back(string_view sv) { return sv_end(sv)[0]; }
 
-int sv_is_empty(string_view sv) {
-  return sv.length == 0;
-}
+int sv_is_empty(string_view sv) { return sv.length == 0; }
 
 string_view sv_remove_prefix(string_view sv, sv_index_t n) {
   return sv_create(sv.data + n, sv.length - n);
@@ -255,6 +251,22 @@ sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos) {
   return SV_NPOS;
 }
 
+char sv_find_first_of_switch(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t* index) {
+  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
+
+  for (int i = pos; i < (int)sv1.length; i++) {
+    for (int j = 0; j < (int)sv2.length; j++) {
+      if (sv1.data[i] == sv2.data[j]) {
+        *index = i;
+        return sv1.data[i];
+      }
+    }
+  }
+
+  *index = SV_NPOS;
+  return '\0';
+}
+
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos) {
   return sv_rfind_char(sv, c, pos);
 }
@@ -378,7 +390,8 @@ int sv_for_split(string_view input, string_view delim, sv_for_split_callback cal
 
 int sv_parse_int(string_view sv, int* value) {
   if (sv_is_empty(sv)) return 0;
-  if (sv.length > 11) return 0; // An int can hold up to 10 digits (+1 for potential '-' sign)
+  if (sv.length > 11) // An int can hold up to 10 digits (+1 for potential '-' sign)
+    return 0;
 
   int negative = 0;
 
@@ -441,21 +454,22 @@ int sv_read_file(const char* filename, string_view* sv) {
 
   fseek(fh, 0L, SEEK_END);
   sv->length = ftell(fh);
-  rewind(fh);
 
-  if (sv->length == 0) {
-    errno = ENODATA;
-    fclose(fh);
-    return 0;
-  }
-  
   char* b = (char*)malloc(sv->length);
 
   if (b == NULL) {
     fclose(fh);
     return 0;
   }
-  
+
+  if (sv->length == 0) {
+    fclose(fh);
+    sv->data = b;
+    return 1;
+  }
+
+  rewind(fh);
+
   if (fread(b, sv->length, 1, fh) != 1) {
     free(b);
     fclose(fh);
@@ -468,9 +482,7 @@ int sv_read_file(const char* filename, string_view* sv) {
   return 1;
 }
 
-void sv_read_file_free(string_view sv) {
-  free((char*)sv.data);
-}
+void sv_read_file_free(string_view sv) { free((char*)sv.data); }
 
 #endif
 
