@@ -252,7 +252,7 @@ sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos) {
 }
 
 char sv_find_first_of_switch(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t* index) {
-  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
+  if (sv_is_empty(sv2) || sv_is_empty(sv1)) return '\0';
 
   for (int i = pos; i < (int)sv1.length; i++) {
     for (int j = 0; j < (int)sv2.length; j++) {
