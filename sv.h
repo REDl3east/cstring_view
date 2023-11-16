@@ -49,6 +49,7 @@ int sv_count_char(string_view sv, char c);
 sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
 
+
 sv_index_t sv_find_insensitive(string_view sv1, string_view sv2, sv_index_t pos);
 
 sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
@@ -66,6 +67,7 @@ int sv_is_numeric(char c);
 int sv_is_alphanum(char c);
 char sv_tolower(char c);
 char sv_toupper(char c);
+
 
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos);
@@ -349,6 +351,7 @@ char sv_toupper(char c) {
   }
   return c;
 }
+
 
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos) {
   return sv_rfind_char(sv, c, pos);
