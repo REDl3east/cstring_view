@@ -25,19 +25,19 @@ int sv_tokenize(string_view sv, void* arg);
 
 int main() {
   // loop through tokens with for loop
-  string_view input = sv(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
+  string_view input = svl(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
 
-  SV_FOR_SPLIT(tok, input, sv(" \n")) {
+  SV_FOR_SPLIT(tok, input, svl(" \n")) {
     printf("'" sv_fmt "' ", sv_arg(tok));
   }
   printf("\n");
 
   // loop through tokens with callback and fill up a list with tokens
 
-  input = sv(" There are 22 men on board in 1924\nI am 27 years old in 2023");
+  input = svl(" There are 22 men on board in 1924\nI am 27 years old in 2023");
 
   token_list list = {0};
-  if (!sv_for_split(input, sv(" \n"), sv_tokenize, &list)) {
+  if (!sv_for_split(input, svl(" \n"), sv_tokenize, &list)) {
     printf("Failed to tokenized!\n");
     return 1;
   }
@@ -66,7 +66,7 @@ int sv_tokenize(string_view sv, void* arg) {
   if (t == NULL) return 0;
 
   t->str = sv;
-  if (sv_find_first_not_of(sv, sv("0123456789"), 0) == SV_NPOS) {
+  if (sv_find_first_not_of(sv, svl("0123456789"), 0) == SV_NPOS) {
     t->type = NUMBER;
   } else {
     t->type = STRING;

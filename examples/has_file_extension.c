@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 int has_html_extension(const char* file) {
-  return sv_ends_with(sv_create_from_cstr(file), sv(".html"));
+  return sv_ends_with(sv_create_from_cstr(file), svl(".html"));
 }
 
 int main() {

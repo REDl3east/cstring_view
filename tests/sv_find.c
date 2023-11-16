@@ -14,44 +14,44 @@ int test_sv_rfind_char(string_view sv, char c, sv_index_t pos, sv_index_t expect
 int test_sv_rfind(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
 
 int main() {
-  if (!test_sv_find_char(sv("there we go"), 'w', 0, 6)) return 1;
-  if (!test_sv_find_char(sv("MMMMMMMM"), 'M', 4, 4)) return 1;
-  if (!test_sv_find_char(sv("A    B     C   A"), 'A', 0, 0)) return 1;
-  if (!test_sv_find_char(sv("A    B     C   A"), 'A', 6, 15)) return 1;
-  if (!test_sv_find_char(sv("Dalton Overmyer"), 'Z', 0, SV_NPOS)) return 1;
-  if (!test_sv_find_char(sv("ABCDEFGHIJKLMNOPQSTUVWXYZ"), 'R', 0, SV_NPOS)) return 1;
+  if (!test_sv_find_char(svl("there we go"), 'w', 0, 6)) return 1;
+  if (!test_sv_find_char(svl("MMMMMMMM"), 'M', 4, 4)) return 1;
+  if (!test_sv_find_char(svl("A    B     C   A"), 'A', 0, 0)) return 1;
+  if (!test_sv_find_char(svl("A    B     C   A"), 'A', 6, 15)) return 1;
+  if (!test_sv_find_char(svl("Dalton Overmyer"), 'Z', 0, SV_NPOS)) return 1;
+  if (!test_sv_find_char(svl("ABCDEFGHIJKLMNOPQSTUVWXYZ"), 'R', 0, SV_NPOS)) return 1;
 
   printf("\n");
 
-  if (!test_sv_find(sv("there we go"), sv("we"), 0, 6)) return 1;
-  if (!test_sv_find(sv("there we go"), sv("goo"), 0, SV_NPOS)) return 1;
-  if (!test_sv_find(sv("AB AB AB AB"), sv("AB"), 0, 0)) return 1;
-  if (!test_sv_find(sv("AB AB AB AB"), sv("AB"), 1, 3)) return 1;
-  if (!test_sv_find(sv("AB AB AB AB"), sv("AB"), 5, 6)) return 1;
-  if (!test_sv_find(sv("AB AB AB ABC"), sv("ABC"), 7, 9)) return 1;
-  if (!test_sv_find(sv("Dalton Overmyer"), sv("Overmyer"), 2, 7)) return 1;
-  if (!test_sv_find(sv("AB AB AB ABC"), sv("ABC "), 0, SV_NPOS)) return 1;
-  if (!test_sv_find(sv("AB AB AB ABC"), sv(""), 0, 0)) return 1;
-  if (!test_sv_find(sv(""), sv(""), 0, 0)) return 1;
-  if (!test_sv_find(sv(""), sv("asdf"), 0, SV_NPOS)) return 1;
+  if (!test_sv_find(svl("there we go"), svl("we"), 0, 6)) return 1;
+  if (!test_sv_find(svl("there we go"), svl("goo"), 0, SV_NPOS)) return 1;
+  if (!test_sv_find(svl("AB AB AB AB"), svl("AB"), 0, 0)) return 1;
+  if (!test_sv_find(svl("AB AB AB AB"), svl("AB"), 1, 3)) return 1;
+  if (!test_sv_find(svl("AB AB AB AB"), svl("AB"), 5, 6)) return 1;
+  if (!test_sv_find(svl("AB AB AB ABC"), svl("ABC"), 7, 9)) return 1;
+  if (!test_sv_find(svl("Dalton Overmyer"), svl("Overmyer"), 2, 7)) return 1;
+  if (!test_sv_find(svl("AB AB AB ABC"), svl("ABC "), 0, SV_NPOS)) return 1;
+  if (!test_sv_find(svl("AB AB AB ABC"), svl(""), 0, 0)) return 1;
+  if (!test_sv_find(svl(""), svl(""), 0, 0)) return 1;
+  if (!test_sv_find(svl(""), svl("asdf"), 0, SV_NPOS)) return 1;
 
   printf("\n");
 
-  if (!test_sv_rfind_char(sv("B AB AB"), 'A', SV_NPOS, 5)) return 1;
-  if (!test_sv_rfind_char(sv("AB AB AB"), 'A', 4, 3)) return 1;
-  if (!test_sv_rfind_char(sv("AB AB AB"), 'C', SV_NPOS, SV_NPOS)) return 1;
-  if (!test_sv_rfind_char(sv(""), 'C', SV_NPOS, SV_NPOS)) return 1;
-  if (!test_sv_rfind_char(sv("ABCDEFGHIJKLMNOPQSTUVWXYZ"), 'R', SV_NPOS, SV_NPOS)) return 1;
+  if (!test_sv_rfind_char(svl("B AB AB"), 'A', SV_NPOS, 5)) return 1;
+  if (!test_sv_rfind_char(svl("AB AB AB"), 'A', 4, 3)) return 1;
+  if (!test_sv_rfind_char(svl("AB AB AB"), 'C', SV_NPOS, SV_NPOS)) return 1;
+  if (!test_sv_rfind_char(svl(""), 'C', SV_NPOS, SV_NPOS)) return 1;
+  if (!test_sv_rfind_char(svl("ABCDEFGHIJKLMNOPQSTUVWXYZ"), 'R', SV_NPOS, SV_NPOS)) return 1;
 
   printf("\n");
 
-  if (!test_sv_rfind(sv("AB AB AB"), sv("AB"), SV_NPOS, 6)) return 1;
-  if (!test_sv_rfind(sv("AB AB AB"), sv("AB"), 5, 3)) return 1;
-  if (!test_sv_rfind(sv("B AB AB"), sv("AB"), 2, 2)) return 1;
-  if (!test_sv_rfind(sv("B AB AB"), sv("AB"), 1, SV_NPOS)) return 1;
-  if (!test_sv_rfind(sv(""), sv(""), 0, 0)) return 1;
-  if (!test_sv_rfind(sv("ABCDE"), sv(""), 0, 0)) return 1;
-  if (!test_sv_rfind(sv(""), sv("ABCDEFG"), 0, SV_NPOS)) return 1;
+  if (!test_sv_rfind(svl("AB AB AB"), svl("AB"), SV_NPOS, 6)) return 1;
+  if (!test_sv_rfind(svl("AB AB AB"), svl("AB"), 5, 3)) return 1;
+  if (!test_sv_rfind(svl("B AB AB"), svl("AB"), 2, 2)) return 1;
+  if (!test_sv_rfind(svl("B AB AB"), svl("AB"), 1, SV_NPOS)) return 1;
+  if (!test_sv_rfind(svl(""), svl(""), 0, 0)) return 1;
+  if (!test_sv_rfind(svl("ABCDE"), svl(""), 0, 0)) return 1;
+  if (!test_sv_rfind(svl(""), svl("ABCDEFG"), 0, SV_NPOS)) return 1;
 
   return 0;
 }

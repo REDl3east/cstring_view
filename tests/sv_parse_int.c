@@ -9,12 +9,12 @@ void print_x();
 
 #define TEST_PARSE_INT(num)                             \
   do {                                                  \
-    if (!test_sv_parse_int(sv(#num), 0, num)) return 1; \
+    if (!test_sv_parse_int(svl(#num), 0, num)) return 1; \
   } while (0)
 
 #define TEST_PARSE_INT_FAIL(num)                     \
   do {                                               \
-    if (!test_sv_parse_int(sv(num), 1, 0)) return 1; \
+    if (!test_sv_parse_int(svl(num), 1, 0)) return 1; \
   } while (0)
 
 int main() {

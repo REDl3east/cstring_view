@@ -14,37 +14,37 @@ int test_starts_with_test(string_view sv1, string_view sv2, int expected);
 int test_ends_with_test(string_view sv1, string_view sv2, int expected);
 
 int main() {
-  if (!test_starts_with_char_test(sv("hello there"), 'h', 1)) return 1;
-  if (!test_starts_with_char_test(sv("w"), 'w', 1)) return 1;
-  if (!test_starts_with_char_test(sv("Dalton Overmyer"), 'D', 1)) return 1;
-  if (!test_starts_with_char_test(sv("what the heck dude"), 'g', 0)) return 1;
-  if (!test_starts_with_char_test(sv(""), 'h', 0)) return 1;
+  if (!test_starts_with_char_test(svl("hello there"), 'h', 1)) return 1;
+  if (!test_starts_with_char_test(svl("w"), 'w', 1)) return 1;
+  if (!test_starts_with_char_test(svl("Dalton Overmyer"), 'D', 1)) return 1;
+  if (!test_starts_with_char_test(svl("what the heck dude"), 'g', 0)) return 1;
+  if (!test_starts_with_char_test(svl(""), 'h', 0)) return 1;
 
   printf("\n");
 
-  if (!test_starts_with_test(sv("hello there"), sv("hello there"), 1)) return 1;
-  if (!test_starts_with_test(sv("hello there"), sv("hello th"), 1)) return 1;
-  if (!test_starts_with_test(sv("hello there"), sv("hello"), 1)) return 1;
-  if (!test_starts_with_test(sv("Dalton Overmyer"), sv("Dalton"), 1)) return 1;
-  if (!test_starts_with_test(sv("hello there"), sv("hello there Dalton"), 0)) return 1;
-  if (!test_starts_with_test(sv(""), sv(""), 1)) return 1;
+  if (!test_starts_with_test(svl("hello there"), svl("hello there"), 1)) return 1;
+  if (!test_starts_with_test(svl("hello there"), svl("hello th"), 1)) return 1;
+  if (!test_starts_with_test(svl("hello there"), svl("hello"), 1)) return 1;
+  if (!test_starts_with_test(svl("Dalton Overmyer"), svl("Dalton"), 1)) return 1;
+  if (!test_starts_with_test(svl("hello there"), svl("hello there Dalton"), 0)) return 1;
+  if (!test_starts_with_test(svl(""), svl(""), 1)) return 1;
 
   printf("\n");
 
-  if (!test_ends_with_char_test(sv("hello there"), 'e', 1)) return 1;
-  if (!test_ends_with_char_test(sv("w"), 'w', 1)) return 1;
-  if (!test_ends_with_char_test(sv("Dalton Overmyer"), 'r', 1)) return 1;
-  if (!test_ends_with_char_test(sv("There goes my hero"), 'O', 0)) return 1;
-  if (!test_ends_with_char_test(sv(""), 'h', 0)) return 1;
+  if (!test_ends_with_char_test(svl("hello there"), 'e', 1)) return 1;
+  if (!test_ends_with_char_test(svl("w"), 'w', 1)) return 1;
+  if (!test_ends_with_char_test(svl("Dalton Overmyer"), 'r', 1)) return 1;
+  if (!test_ends_with_char_test(svl("There goes my hero"), 'O', 0)) return 1;
+  if (!test_ends_with_char_test(svl(""), 'h', 0)) return 1;
 
   printf("\n");
 
-  if (!test_ends_with_test(sv("hello there"), sv("hello there"), 1)) return 1;
-  if (!test_ends_with_test(sv("hello there"), sv("there"), 1)) return 1;
-  if (!test_ends_with_test(sv("hello there"), sv("hello"), 0)) return 1;
-  if (!test_ends_with_test(sv("Dalton Overmyer"), sv("Overmyer"), 1)) return 1;
-  if (!test_ends_with_test(sv("hello there"), sv("hello there Dalton"), 0)) return 1;
-  if (!test_ends_with_test(sv(""), sv(""), 1)) return 1;
+  if (!test_ends_with_test(svl("hello there"), svl("hello there"), 1)) return 1;
+  if (!test_ends_with_test(svl("hello there"), svl("there"), 1)) return 1;
+  if (!test_ends_with_test(svl("hello there"), svl("hello"), 0)) return 1;
+  if (!test_ends_with_test(svl("Dalton Overmyer"), svl("Overmyer"), 1)) return 1;
+  if (!test_ends_with_test(svl("hello there"), svl("hello there Dalton"), 0)) return 1;
+  if (!test_ends_with_test(svl(""), svl(""), 1)) return 1;
 
   return 0;
 }

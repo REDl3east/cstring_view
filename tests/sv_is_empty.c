@@ -11,29 +11,29 @@ int test_is_empty(string_view sv);
 int test_is_not_empty(string_view sv);
 
 int main() {
-  if (!test_is_empty(sv(""))) return 1;
+  if (!test_is_empty(svl(""))) return 1;
   if (!test_is_empty(sv_create("", 0))) return 1;
   if (!test_is_empty(sv_create("There goes my hero", 0))) return 1;
   if (!test_is_empty(sv_create_from_cstr(""))) return 1;
-  if (!test_is_empty(sv_substr(sv("hello there"), 0, 0))) return 1;
-  if (!test_is_empty(sv_substr(sv("hello there"), 1, 0))) return 1;
-  if (!test_is_empty(sv_substr(sv("hello there"), 5, 0))) return 1;
-  if (!test_is_empty(sv_remove_prefix(sv("12345"), 5))) return 1;
-  if (!test_is_empty(sv_remove_prefix(sv("12345fffff"), 10))) return 1;
-  if (!test_is_empty(sv_remove_suffix(sv("12345"), 5))) return 1;
-  if (!test_is_empty(sv_remove_suffix(sv("12345asd"), 8))) return 1;
+  if (!test_is_empty(sv_substr(svl("hello there"), 0, 0))) return 1;
+  if (!test_is_empty(sv_substr(svl("hello there"), 1, 0))) return 1;
+  if (!test_is_empty(sv_substr(svl("hello there"), 5, 0))) return 1;
+  if (!test_is_empty(sv_remove_prefix(svl("12345"), 5))) return 1;
+  if (!test_is_empty(sv_remove_prefix(svl("12345fffff"), 10))) return 1;
+  if (!test_is_empty(sv_remove_suffix(svl("12345"), 5))) return 1;
+  if (!test_is_empty(sv_remove_suffix(svl("12345asd"), 8))) return 1;
 
-  if (!test_is_not_empty(sv("asdf"))) return 1;
+  if (!test_is_not_empty(svl("asdf"))) return 1;
   if (!test_is_not_empty(sv_create("d", 1))) return 1;
   if (!test_is_not_empty(sv_create("There goes my hero", 10))) return 1;
   if (!test_is_not_empty(sv_create_from_cstr("hello"))) return 1;
-  if (!test_is_not_empty(sv_substr(sv("hello there"), 0, 1))) return 1;
-  if (!test_is_not_empty(sv_substr(sv("hello there"), 1, 2))) return 1;
-  if (!test_is_not_empty(sv_substr(sv("hello there"), 5, 3))) return 1;
-  if (!test_is_not_empty(sv_remove_prefix(sv("12345"), 3))) return 1;
-  if (!test_is_not_empty(sv_remove_prefix(sv("12345fffff"), 5))) return 1;
-  if (!test_is_not_empty(sv_remove_suffix(sv("12345"), 2))) return 1;
-  if (!test_is_not_empty(sv_remove_suffix(sv("12345asd"), 3))) return 1;
+  if (!test_is_not_empty(sv_substr(svl("hello there"), 0, 1))) return 1;
+  if (!test_is_not_empty(sv_substr(svl("hello there"), 1, 2))) return 1;
+  if (!test_is_not_empty(sv_substr(svl("hello there"), 5, 3))) return 1;
+  if (!test_is_not_empty(sv_remove_prefix(svl("12345"), 3))) return 1;
+  if (!test_is_not_empty(sv_remove_prefix(svl("12345fffff"), 5))) return 1;
+  if (!test_is_not_empty(sv_remove_suffix(svl("12345"), 2))) return 1;
+  if (!test_is_not_empty(sv_remove_suffix(svl("12345asd"), 3))) return 1;
 
   return 0;
 }

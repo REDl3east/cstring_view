@@ -15,7 +15,7 @@ int test_back(string_view sv, char expected);
 int main() {
   string_view sv;
 
-  sv = sv("What is some random text?");
+  sv = svl("What is some random text?");
   if (!test_at(sv, 0, 'W')) return 1;
   if (!test_at(sv, 1, 'h')) return 1;
   if (!test_at(sv, 2, 'a')) return 1;

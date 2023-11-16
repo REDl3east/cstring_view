@@ -23,7 +23,7 @@ int main() {
     return 1;
   }
 
-  sv = sv("1");
+  sv = svl("1");
   if (!test_sv_begin_end_equal(sv)) return 1;
   if (!test_sv_begin_end_equal(sv_create("hello", 1))) return 1;
   if (!test_sv_begin_end_equal(sv_create_from_cstr("X"))) return 1;
@@ -35,7 +35,7 @@ int main() {
   if (!test_sv_begin_end_equal(sv)) return 1;
   free(dynstr);
 
-  sv = sv("12");
+  sv = svl("12");
   if (!test_sv_begin_end_not_equal(sv)) return 1;
   if (!test_sv_begin_end_not_equal(sv_create("hello", 2))) return 1;
   if (!test_sv_begin_end_not_equal(sv_create_from_cstr(":)"))) return 1;
