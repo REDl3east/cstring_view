@@ -215,7 +215,7 @@ int sv_contains_insensitive(string_view sv1, string_view sv2) {
 
 int sv_count_char(string_view sv, char c) {
   int count = 0;
-  for (int i = 0; i < sv.length; i++) {
+  for (int i = 0; i < (int)sv.length; i++) {
     if (sv.data[i] == c) count++;
   }
   return count;
