@@ -19,7 +19,7 @@ void print_x();
 
 int main() {
   // TEST_PARSE_FLOAT(10);
-  TEST_PARSE_FLOAT(10e0);
+  TEST_PARSE_FLOAT(10023.25);
   return 0;
 }
 

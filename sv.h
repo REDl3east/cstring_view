@@ -547,11 +547,15 @@ int sv_parse_float(string_view sv, float* value) {
     if (pos1 == SV_NPOS) {
       sv_index_t pos2 = sv_find_first_of(sv, svl("eE"), 0);
       if (pos2 == SV_NPOS) { // no frac and no expon
+        if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+        
         for (size_t i = 0; i < sv.length; ++i) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
         goto end;
       } else { // no frac, but expon
+        if (sv_find_first_not_of(sv_substr(sv, 0, pos2), svl("0123456789"), 0) != SV_NPOS) return 0;
+
         for (size_t i = 0; i < pos2; ++i) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
@@ -561,6 +565,8 @@ int sv_parse_float(string_view sv, float* value) {
         goto expon;
       }
     } else { // we found '.'
+      if (sv_find_first_not_of(sv_substr(sv, 0, pos1), svl("0123456789"), 0) != SV_NPOS) return 0;
+
       for (size_t i = 0; i < pos1; ++i) {
         num = num * 10 + (sv_at(sv, i) - '0');
       }
@@ -582,9 +588,16 @@ int sv_parse_float(string_view sv, float* value) {
   float exponent = 0.0f;
 
 frac:
-  if(sv_is_empty(sv)) return 0; // fraction must have something after it
+  if (sv_is_empty(sv)) return 0; // fraction must have something after it
+  sv_index_t pos = sv_find_first_of(sv, svl("eE"), 0);
+  if (pos == SV_NPOS) { // fraction only
+
+    goto end;
+  } else { // fraction and exponent
+  }
+
 expon:
-  if(sv_is_empty(sv)) return 0; // exponet must have something after it
+  if (sv_is_empty(sv)) return 0; // exponet must have something after it
 
 end:
 
