@@ -68,7 +68,6 @@ int sv_is_alphanum(char c);
 char sv_tolower(char c);
 char sv_toupper(char c);
 
-
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos);
 sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos);
 sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos);
@@ -85,6 +84,7 @@ string_view sv_split_next(string_view input, string_view delim, string_view* tok
 int sv_for_split(string_view input, string_view delim, sv_for_split_callback callback, void* arg);
 
 int sv_parse_int(string_view sv, int* value);
+int sv_parse_float(string_view sv, float* value);
 char* sv_strdup(string_view sv);
 int sv_read_file(const char* filename, string_view* sv);
 void sv_read_file_free(string_view sv);
@@ -520,6 +520,11 @@ int sv_parse_int(string_view sv, int* value) {
   }
 
   *value = negative ? -tmp : tmp;
+
+  return 1;
+}
+
+int sv_parse_float(string_view sv, float* value){
 
   return 1;
 }
