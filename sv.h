@@ -4,10 +4,10 @@
 #define SV_NPOS (sv_index_t)(-1)
 
 #define svl(cstr_literal) sv_create(cstr_literal, sizeof(cstr_literal) - 1)
-#define svc(cstr)        sv_create_from_cstr(cstr)
-#define sv_empty         svl("")
-#define sv_fmt           "%.*s"
-#define sv_arg(sv)       (int)sv.length, sv.data
+#define svc(cstr)         sv_create_from_cstr(cstr)
+#define sv_empty          svl("")
+#define sv_fmt            "%.*s"
+#define sv_arg(sv)        (int)sv.length, sv.data
 
 typedef unsigned long int sv_index_t;
 
@@ -48,7 +48,6 @@ int sv_count_char(string_view sv, char c);
 
 sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
 sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
-
 
 sv_index_t sv_find_insensitive(string_view sv1, string_view sv2, sv_index_t pos);
 
@@ -352,7 +351,6 @@ char sv_toupper(char c) {
   return c;
 }
 
-
 sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos) {
   return sv_rfind_char(sv, c, pos);
 }
@@ -515,7 +513,7 @@ int sv_parse_int(string_view sv, int* value) {
     }
   } else { // No overflow possible
     for (size_t i = 0; i < sv.length; ++i) {
-      tmp = tmp * 10 + (sv.data[i] - '0');
+      tmp = tmp * 10 + (sv_at(sv, i) - '0');
     }
   }
 
@@ -524,7 +522,73 @@ int sv_parse_int(string_view sv, int* value) {
   return 1;
 }
 
-int sv_parse_float(string_view sv, float* value){
+// Follows JSON format: https://www.json.org/json-en.html
+int sv_parse_float(string_view sv, float* value) {
+  if (sv_is_empty(sv)) return 0;
+  int negative = 0;
+
+  if (sv_front(sv) == '-') {
+    negative = 1;
+    sv       = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) return 0;
+  }
+
+  float num = 0.0f;
+
+  if (sv_front(sv) == '0') {
+    sv = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) {
+      *value = negative ? -0.0f : 0.0f;
+      return 1;
+    }
+    goto frac;
+  } else if (sv_is_numeric(sv_front(sv))) {
+    sv_index_t pos1 = sv_find_char(sv, '.', 0);
+    if (pos1 == SV_NPOS) {
+      sv_index_t pos2 = sv_find_first_of(sv, svl("eE"), 0);
+      if (pos2 == SV_NPOS) { // no frac and no expon
+        for (size_t i = 0; i < sv.length; ++i) {
+          num = num * 10 + (sv_at(sv, i) - '0');
+        }
+        goto end;
+      } else { // no frac, but expon
+        for (size_t i = 0; i < pos2; ++i) {
+          num = num * 10 + (sv_at(sv, i) - '0');
+        }
+
+        // remove e or E
+        sv = sv_remove_prefix(sv, pos2 + 1);
+        goto expon;
+      }
+    } else { // we found '.'
+      for (size_t i = 0; i < pos1; ++i) {
+        num = num * 10 + (sv_at(sv, i) - '0');
+      }
+
+      // remove .
+      sv = sv_remove_prefix(sv, pos1 + 1);
+      goto frac;
+    }
+
+    for (size_t i = 0; i < pos1 + 1; ++i) {
+      num = num * 10 + (sv_at(sv, i) - '0');
+    }
+    goto frac;
+  } else {
+    return 0;
+  }
+
+  float fraction = 0.0f;
+  float exponent = 0.0f;
+
+frac:
+  if(sv_is_empty(sv)) return 0; // fraction must have something after it
+expon:
+  if(sv_is_empty(sv)) return 0; // exponet must have something after it
+
+end:
+
+  // *value = negative ? -tmp : tmp;
 
   return 1;
 }

@@ -18,14 +18,14 @@ void print_x();
   } while (0)
 
 int main() {
-  TEST_PARSE_FLOAT(10.5);
-
+  // TEST_PARSE_FLOAT(10);
+  TEST_PARSE_FLOAT(10e0);
   return 0;
 }
 
 int test_sv_parse_float(string_view input, int will_fail, float expected) {
-  int inputi;
-  if (!sv_parse_float(input, &inputi)) {
+  float inputf;
+  if (!sv_parse_float(input, &inputf)) {
     if (will_fail) {
       print_check();
       printf("Expected parse failure: '" sv_fmt "'\n", sv_arg(input));
@@ -39,18 +39,18 @@ int test_sv_parse_float(string_view input, int will_fail, float expected) {
 
   if (will_fail) {
     print_x();
-    printf("Expected parse to fail: '" sv_fmt "' == %d\n", sv_arg(input), inputi);
+    printf("Expected parse to fail: '" sv_fmt "' == %f\n", sv_arg(input), inputf);
     return 0;
   }
 
-  if (expected == inputi) {
+  if (expected == inputf) {
     print_check();
-    printf("'" sv_fmt "' == %d\n", sv_arg(input), inputi);
+    printf("'" sv_fmt "' == %f\n", sv_arg(input), inputf);
     return 1;
   }
 
-  print_check();
-  printf("'" sv_fmt "' != %d\n", sv_arg(input), inputi);
+  print_x();
+  printf("'" sv_fmt "' != %f\n", sv_arg(input), inputf);
 
   return 0;
 }
