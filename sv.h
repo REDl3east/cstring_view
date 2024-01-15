@@ -522,10 +522,26 @@ int sv_parse_int(string_view sv, int* value) {
   return 1;
 }
 
-// Follows JSON format: https://www.json.org/json-en.html
+static float sv_pow(float base, float exponent) {
+  float result = 1.0;
+
+  if (exponent >= 0) {
+    for (int i = 0; i < exponent; i++) {
+      result *= base;
+    }
+  } else {
+    for (int i = 0; i > exponent; i--) {
+      result /= base;
+    }
+  }
+
+  return result;
+}
+
 int sv_parse_float(string_view sv, float* value) {
   if (sv_is_empty(sv)) return 0;
   int negative = 0;
+  float num    = 0.0f;
 
   if (sv_front(sv) == '-') {
     negative = 1;
@@ -533,22 +549,24 @@ int sv_parse_float(string_view sv, float* value) {
     if (sv_is_empty(sv)) return 0;
   }
 
-  float num = 0.0f;
+  if (sv_front(sv) == '+') {
+    sv       = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) return 0;
+  }
 
-  if (sv_front(sv) == '0') {
+  if (sv_front(sv) == '.') {
     sv = sv_remove_prefix(sv, 1);
-    if (sv_is_empty(sv)) {
-      *value = negative ? -0.0f : 0.0f;
-      return 1;
-    }
+    if (sv_is_empty(sv)) return 0;
     goto frac;
-  } else if (sv_is_numeric(sv_front(sv))) {
+  }
+
+  if (sv_is_numeric(sv_front(sv))) {
     sv_index_t pos1 = sv_find_char(sv, '.', 0);
     if (pos1 == SV_NPOS) {
       sv_index_t pos2 = sv_find_first_of(sv, svl("eE"), 0);
       if (pos2 == SV_NPOS) { // no frac and no expon
         if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
-        
+
         for (size_t i = 0; i < sv.length; ++i) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
@@ -560,8 +578,7 @@ int sv_parse_float(string_view sv, float* value) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
 
-        // remove e or E
-        sv = sv_remove_prefix(sv, pos2 + 1);
+        sv = sv_remove_prefix(sv, pos2 + 1); // remove e or E
         goto expon;
       }
     } else { // we found '.'
@@ -571,37 +588,64 @@ int sv_parse_float(string_view sv, float* value) {
         num = num * 10 + (sv_at(sv, i) - '0');
       }
 
-      // remove .
-      sv = sv_remove_prefix(sv, pos1 + 1);
+      sv = sv_remove_prefix(sv, pos1 + 1); // remove .
       goto frac;
     }
 
-    for (size_t i = 0; i < pos1 + 1; ++i) {
-      num = num * 10 + (sv_at(sv, i) - '0');
-    }
-    goto frac;
   } else {
     return 0;
   }
 
+frac : {
+  if (sv_is_empty(sv)) goto end;
   float fraction = 0.0f;
-  float exponent = 0.0f;
-
-frac:
-  if (sv_is_empty(sv)) return 0; // fraction must have something after it
+  float denom    = 1.0f;
   sv_index_t pos = sv_find_first_of(sv, svl("eE"), 0);
   if (pos == SV_NPOS) { // fraction only
+    if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+    for (size_t i = 0; i < sv.length; ++i) {
+      fraction = fraction * 10 + (sv_at(sv, i) - '0');
+      denom *= 10.0f;
+    }
+    num = num + (fraction / denom);
 
     goto end;
   } else { // fraction and exponent
-  }
+    if (sv_find_first_not_of(sv_substr(sv, 0, pos), svl("0123456789"), 0) != SV_NPOS) return 0;
+    for (size_t i = 0; i < pos; ++i) {
+      fraction = fraction * 10 + (sv_at(sv, i) - '0');
+      denom *= 10.0f;
+    }
+    num = num + (fraction / denom);
 
-expon:
+    sv = sv_remove_prefix(sv, pos + 1); // remove e or E
+    goto expon;
+  }
+}
+expon : {
   if (sv_is_empty(sv)) return 0; // exponet must have something after it
 
+  int negative_expon = 0;
+  if (sv_front(sv) == '-') {
+    negative_expon = 1;
+    sv             = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) return 0;
+  } else if (sv_front(sv) == '+') {
+    sv = sv_remove_prefix(sv, 1);
+    if (sv_is_empty(sv)) return 0;
+  }
+
+  if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+  float exponent = 0.0f;
+  for (size_t i = 0; i < sv.length; ++i) {
+    exponent = exponent * 10 + (sv_at(sv, i) - '0');
+  }
+
+  num = num * sv_pow(10, negative_expon ? -exponent : exponent);
+}
 end:
 
-  // *value = negative ? -tmp : tmp;
+  *value = negative ? -num : num;
 
   return 1;
 }
