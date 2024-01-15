@@ -561,7 +561,7 @@ int sv_parse_float(string_view sv, float* value) {
   }
 
   if (sv_is_numeric(sv_front(sv))) {
-    sv_index_t pos1 = sv_find_char(sv, '.', 0);
+    sv_index_t pos1 = sv_find_first_of(sv, svl("."), 0);
     if (pos1 == SV_NPOS) {
       sv_index_t pos2 = sv_find_first_of(sv, svl("eE"), 0);
       if (pos2 == SV_NPOS) { // no frac and no expon
