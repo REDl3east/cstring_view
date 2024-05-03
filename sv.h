@@ -1,6 +1,12 @@
 #ifndef _SV_H_
 #define _SV_H_
 
+#ifdef __cplusplus
+  #include <cstdint>
+#else
+  #include <stdint.h>
+#endif
+
 #define SV_NPOS (sv_index_t)(-1)
 
 #define svl(cstr_literal) sv_create(cstr_literal, sizeof(cstr_literal) - 1)
@@ -83,6 +89,7 @@ string_view sv_split_next(string_view input, string_view delim, string_view* tok
 int sv_for_split(string_view input, string_view delim, sv_for_split_callback callback, void* arg);
 
 int sv_parse_int(string_view sv, int* value);
+int sv_parse_uint64(string_view sv, uint64_t* value);
 int sv_parse_float(string_view sv, float* value);
 char* sv_strdup(string_view sv);
 int sv_read_file(const char* filename, string_view* sv);
@@ -101,13 +108,11 @@ void sv_read_file_free(string_view sv);
 
   #ifdef __cplusplus
     #include <climits>
-    #include <cstdint>
     #include <cstdio>
     #include <cstdlib>
     #include <cstring>
   #else
     #include <limits.h>
-    #include <stdint.h>
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -522,6 +527,47 @@ int sv_parse_int(string_view sv, int* value) {
   return 1;
 }
 
+int sv_parse_uint64(string_view sv, uint64_t* value) {
+  if (sv_is_empty(sv)) return 0;
+  if (sv.length > 20) // A uint64_t can hold up to 20 digits.
+    return 0;
+
+  if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+
+  uint64_t tmp = 0;
+
+  // Parse with overflow checking if the number has 20 digits
+  if (sv.length == 20) {
+    size_t i = 0;
+
+    // Parse without overflow checking until the 19th digit.
+    for (; i < sv.length && i < 19; ++i) {
+      tmp = tmp * 10 + (sv.data[i] - '0');
+    }
+
+    // Parse the remaining digits with overflow checking.
+    for (; i < sv.length; ++i) {
+      uint64_t limit       = ((uint64_t)-1 / 10);
+      uint64_t limit_digit = ((uint64_t)-1 % 10);
+      uint64_t digit       = sv.data[i] - '0';
+
+      // Check for overflow.
+      if (tmp > limit || (tmp == limit && digit > limit_digit))
+        return 0; // Overflow would occur if we added this digit.
+
+      tmp = tmp * 10 + digit;
+    }
+  } else { // No overflow possible
+    for (size_t i = 0; i < sv.length; ++i) {
+      tmp = tmp * 10 + (sv_at(sv, i) - '0');
+    }
+  }
+
+  *value = tmp;
+
+  return 1;
+}
+
 static float sv_pow(float base, float exponent) {
   float result = 1.0;
 
@@ -550,7 +596,7 @@ int sv_parse_float(string_view sv, float* value) {
   }
 
   if (sv_front(sv) == '+') {
-    sv       = sv_remove_prefix(sv, 1);
+    sv = sv_remove_prefix(sv, 1);
     if (sv_is_empty(sv)) return 0;
   }
 
