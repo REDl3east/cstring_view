@@ -7,14 +7,14 @@
 
 void print_check();
 void print_x();
-int test_sv_begin_end_equal(string_view sv);
-int test_sv_begin_end_not_equal(string_view sv);
+int test_sv_begin_end_equal(cstring_view sv);
+int test_sv_begin_end_not_equal(cstring_view sv);
 
 int main() {
-  string_view sv;
+  cstring_view sv;
 
   sv = sv_empty;
-  if (sv_is_empty(sv)) { // good to note that if a string_view is empty, then it is UB to access the end ptr of the data.
+  if (sv_is_empty(sv)) { // good to note that if a cstring_view is empty, then it is UB to access the end ptr of the data.
     print_check();
     printf("sv is empty\n");
   } else {
@@ -51,7 +51,7 @@ int main() {
   return 0;
 }
 
-int test_sv_begin_end_equal(string_view sv) {
+int test_sv_begin_end_equal(cstring_view sv) {
   if (sv_begin(sv) != sv_end(sv)) {
     print_x();
     printf("'" sv_fmt "' begin != '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));
@@ -63,7 +63,7 @@ int test_sv_begin_end_equal(string_view sv) {
   }
 }
 
-int test_sv_begin_end_not_equal(string_view sv) {
+int test_sv_begin_end_not_equal(cstring_view sv) {
   if (sv_begin(sv) == sv_end(sv)) {
     print_x();
     printf("'" sv_fmt "' begin == '" sv_fmt "' end\n", sv_arg(sv), sv_arg(sv));

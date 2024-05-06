@@ -8,12 +8,12 @@
 void print_check();
 void print_x();
 
-int test_at(string_view sv, sv_index_t index, char expected);
-int test_front(string_view sv, char expected);
-int test_back(string_view sv, char expected);
+int test_at(cstring_view sv, sv_index_t index, char expected);
+int test_front(cstring_view sv, char expected);
+int test_back(cstring_view sv, char expected);
 
 int main() {
-  string_view sv;
+  cstring_view sv;
 
   sv = svl("What is some random text?");
   if (!test_at(sv, 0, 'W')) return 1;
@@ -39,7 +39,7 @@ int main() {
   return 0;
 }
 
-int test_at(string_view sv, sv_index_t index, char expected) {
+int test_at(cstring_view sv, sv_index_t index, char expected) {
   if (sv_at(sv, index) == expected) {
     print_check();
     printf("'" sv_fmt "' at %ld == '%c'\n", sv_arg(sv), index, expected);
@@ -51,7 +51,7 @@ int test_at(string_view sv, sv_index_t index, char expected) {
   }
 }
 
-int test_front(string_view sv, char expected) {
+int test_front(cstring_view sv, char expected) {
   if (sv_front(sv) == expected) {
     print_check();
     printf("'" sv_fmt "' front == '%c'\n", sv_arg(sv), expected);
@@ -63,7 +63,7 @@ int test_front(string_view sv, char expected) {
   }
 }
 
-int test_back(string_view sv, char expected) {
+int test_back(cstring_view sv, char expected) {
   if (sv_back(sv) == expected) {
     print_check();
     printf("'" sv_fmt "' back == '%c'\n", sv_arg(sv), expected);

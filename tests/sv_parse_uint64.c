@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-int test_sv_parse_uint64(string_view input, int will_fail, uint64_t expected);
+int test_sv_parse_uint64(cstring_view input, int will_fail, uint64_t expected);
 void print_check();
 void print_x();
 
@@ -45,7 +45,7 @@ int main() {
   return 0;
 }
 
-int test_sv_parse_uint64(string_view input, int will_fail, uint64_t expected) {
+int test_sv_parse_uint64(cstring_view input, int will_fail, uint64_t expected) {
   uint64_t inputi;
   if (!sv_parse_uint64(input, &inputi)) {
     if (will_fail) {

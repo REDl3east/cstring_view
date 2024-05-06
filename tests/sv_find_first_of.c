@@ -6,8 +6,8 @@
 void print_check();
 void print_x();
 
-int test_sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
-int test_sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_find_first_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_find_first_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
 
 int main() {
   if (!test_sv_find_first_of(svl("123456789"), svl("45"), 0, 3)) return 1;
@@ -41,7 +41,7 @@ int main() {
   return 0;
 }
 
-int test_sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_find_first_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find_first_of(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {
@@ -69,7 +69,7 @@ int test_sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos, sv_i
   return 1;
 }
 
-int test_sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_find_first_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find_first_not_of(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {

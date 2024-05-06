@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-int test_sv_parse_int(string_view input, int will_fail, int expected);
+int test_sv_parse_int(cstring_view input, int will_fail, int expected);
 void print_check();
 void print_x();
 
@@ -50,7 +50,7 @@ int main() {
   return 0;
 }
 
-int test_sv_parse_int(string_view input, int will_fail, int expected) {
+int test_sv_parse_int(cstring_view input, int will_fail, int expected) {
   int inputi;
   if (!sv_parse_int(input, &inputi)) {
     if (will_fail) {

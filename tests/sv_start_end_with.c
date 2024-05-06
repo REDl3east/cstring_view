@@ -8,10 +8,10 @@
 void print_check();
 void print_x();
 
-int test_starts_with_char_test(string_view sv, char c, int expected);
-int test_ends_with_char_test(string_view sv, char c, int expected);
-int test_starts_with_test(string_view sv1, string_view sv2, int expected);
-int test_ends_with_test(string_view sv1, string_view sv2, int expected);
+int test_starts_with_char_test(cstring_view sv, char c, int expected);
+int test_ends_with_char_test(cstring_view sv, char c, int expected);
+int test_starts_with_test(cstring_view sv1, cstring_view sv2, int expected);
+int test_ends_with_test(cstring_view sv1, cstring_view sv2, int expected);
 
 int main() {
   if (!test_starts_with_char_test(svl("hello there"), 'h', 1)) return 1;
@@ -49,7 +49,7 @@ int main() {
   return 0;
 }
 
-int test_starts_with_char_test(string_view sv, char c, int expected) {
+int test_starts_with_char_test(cstring_view sv, char c, int expected) {
   int tmp = sv_starts_with_char(sv, c);
   if (tmp == expected) {
     print_check();
@@ -70,7 +70,7 @@ int test_starts_with_char_test(string_view sv, char c, int expected) {
   }
 }
 
-int test_ends_with_char_test(string_view sv, char c, int expected) {
+int test_ends_with_char_test(cstring_view sv, char c, int expected) {
   int tmp = sv_ends_with_char(sv, c);
   if (tmp == expected) {
     print_check();
@@ -91,7 +91,7 @@ int test_ends_with_char_test(string_view sv, char c, int expected) {
   }
 }
 
-int test_starts_with_test(string_view sv1, string_view sv2, int expected) {
+int test_starts_with_test(cstring_view sv1, cstring_view sv2, int expected) {
   int tmp = sv_starts_with(sv1, sv2);
   if (tmp == expected) {
     print_check();
@@ -112,7 +112,7 @@ int test_starts_with_test(string_view sv1, string_view sv2, int expected) {
   }
 }
 
-int test_ends_with_test(string_view sv1, string_view sv2, int expected) {
+int test_ends_with_test(cstring_view sv1, cstring_view sv2, int expected) {
   int tmp = sv_ends_with(sv1, sv2);
   if (tmp == expected) {
     print_check();

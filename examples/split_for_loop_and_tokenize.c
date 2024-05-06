@@ -10,7 +10,7 @@ typedef enum token_type {
 } token_type;
 
 typedef struct token {
-  string_view str;
+  cstring_view str;
   token_type type;
   struct token* next;
   struct token* prev;
@@ -21,11 +21,11 @@ typedef struct token_list {
   token* tail;
 } token_list;
 
-int sv_tokenize(string_view sv, void* arg);
+int sv_tokenize(cstring_view sv, void* arg);
 
 int main() {
   // loop through tokens with for loop
-  string_view input = svl(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
+  cstring_view input = svl(" There is a man   \n  named         Dalton  and  \n he loved to go outside. Not!  ");
 
   SV_FOR_SPLIT(tok, input, svl(" \n")) {
     printf("'" sv_fmt "' ", sv_arg(tok));
@@ -59,7 +59,7 @@ int main() {
   return 0;
 }
 
-int sv_tokenize(string_view sv, void* arg) {
+int sv_tokenize(cstring_view sv, void* arg) {
   token_list* list = (token_list*)arg;
 
   token* t = malloc(sizeof(token));

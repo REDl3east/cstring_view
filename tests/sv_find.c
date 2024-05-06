@@ -8,10 +8,10 @@
 void print_check();
 void print_x();
 
-int test_sv_find_char(string_view sv, char c, sv_index_t pos, sv_index_t expected);
-int test_sv_find(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
-int test_sv_rfind_char(string_view sv, char c, sv_index_t pos, sv_index_t expected);
-int test_sv_rfind(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_find_char(cstring_view sv, char c, sv_index_t pos, sv_index_t expected);
+int test_sv_find(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_rfind_char(cstring_view sv, char c, sv_index_t pos, sv_index_t expected);
+int test_sv_rfind(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
 
 int main() {
   if (!test_sv_find_char(svl("there we go"), 'w', 0, 6)) return 1;
@@ -56,7 +56,7 @@ int main() {
   return 0;
 }
 
-int test_sv_find_char(string_view sv, char c, sv_index_t pos, sv_index_t expected) {
+int test_sv_find_char(cstring_view sv, char c, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find_char(sv, c, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {
@@ -82,7 +82,7 @@ int test_sv_find_char(string_view sv, char c, sv_index_t pos, sv_index_t expecte
   }
 }
 
-int test_sv_find(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_find(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {
@@ -108,7 +108,7 @@ int test_sv_find(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t ex
   }
 }
 
-int test_sv_rfind_char(string_view sv, char c, sv_index_t pos, sv_index_t expected) {
+int test_sv_rfind_char(cstring_view sv, char c, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_rfind_char(sv, c, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {
@@ -134,7 +134,7 @@ int test_sv_rfind_char(string_view sv, char c, sv_index_t pos, sv_index_t expect
   }
 }
 
-int test_sv_rfind(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_rfind(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_rfind(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {

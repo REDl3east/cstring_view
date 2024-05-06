@@ -6,7 +6,7 @@
 
 int main() {
 
-  string_view sv;
+  cstring_view sv;
   if(!sv_read_file(__FILE__, &sv)){
     printf("Failed to read file: %s\n", strerror(errno));
     return 1;

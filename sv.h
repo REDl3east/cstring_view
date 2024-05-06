@@ -17,55 +17,55 @@
 
 typedef unsigned long int sv_index_t;
 
-typedef struct string_view {
+typedef struct cstring_view {
   const char* data;
   sv_index_t length;
-} string_view;
+} cstring_view;
 
-typedef int (*sv_for_split_callback)(string_view, void*);
+typedef int (*sv_for_split_callback)(cstring_view, void*);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-string_view sv_create(const char* data, sv_index_t length);
-string_view sv_create_from_cstr(const char* data);
-const char* sv_begin(string_view sv);
-const char* sv_end(string_view sv);
-char sv_at(string_view sv, sv_index_t index);
-char sv_front(string_view sv);
-char sv_back(string_view sv);
-int sv_is_empty(string_view sv);
-string_view sv_remove_prefix(string_view sv, sv_index_t n);
-string_view sv_remove_suffix(string_view sv, sv_index_t n);
-void sv_swap(string_view sv1, string_view sv2);
-string_view sv_substr(string_view sv, sv_index_t pos, sv_index_t count);
-int sv_compare(string_view sv1, string_view sv2);
-int sv_starts_with(string_view sv1, string_view sv2);
-int sv_starts_with_insensitive(string_view sv1, string_view sv2);
+cstring_view sv_create(const char* data, sv_index_t length);
+cstring_view sv_create_from_cstr(const char* data);
+const char* sv_begin(cstring_view sv);
+const char* sv_end(cstring_view sv);
+char sv_at(cstring_view sv, sv_index_t index);
+char sv_front(cstring_view sv);
+char sv_back(cstring_view sv);
+int sv_is_empty(cstring_view sv);
+cstring_view sv_remove_prefix(cstring_view sv, sv_index_t n);
+cstring_view sv_remove_suffix(cstring_view sv, sv_index_t n);
+void sv_swap(cstring_view sv1, cstring_view sv2);
+cstring_view sv_substr(cstring_view sv, sv_index_t pos, sv_index_t count);
+int sv_compare(cstring_view sv1, cstring_view sv2);
+int sv_starts_with(cstring_view sv1, cstring_view sv2);
+int sv_starts_with_insensitive(cstring_view sv1, cstring_view sv2);
 
-int sv_starts_with_char(string_view sv1, char c);
-int sv_ends_with(string_view sv1, string_view sv2);
-int sv_ends_with_char(string_view sv1, char c);
-int sv_contains(string_view sv1, string_view sv2);
-int sv_contains_insensitive(string_view sv1, string_view sv2);
+int sv_starts_with_char(cstring_view sv1, char c);
+int sv_ends_with(cstring_view sv1, cstring_view sv2);
+int sv_ends_with_char(cstring_view sv1, char c);
+int sv_contains(cstring_view sv1, cstring_view sv2);
+int sv_contains_insensitive(cstring_view sv1, cstring_view sv2);
 
-int sv_count_char(string_view sv, char c);
+int sv_count_char(cstring_view sv, char c);
 
-sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos);
-sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos);
+sv_index_t sv_find_char(cstring_view sv1, char c, sv_index_t pos);
+sv_index_t sv_find(cstring_view sv1, cstring_view sv2, sv_index_t pos);
 
-sv_index_t sv_find_insensitive(string_view sv1, string_view sv2, sv_index_t pos);
+sv_index_t sv_find_insensitive(cstring_view sv1, cstring_view sv2, sv_index_t pos);
 
-sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos);
-sv_index_t sv_rfind(string_view sv1, string_view sv2, sv_index_t pos);
+sv_index_t sv_rfind_char(cstring_view sv1, char c, sv_index_t pos);
+sv_index_t sv_rfind(cstring_view sv1, cstring_view sv2, sv_index_t pos);
 
-sv_index_t sv_find_first_of_char(string_view sv, char c, sv_index_t pos);
-sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos);
+sv_index_t sv_find_first_of_char(cstring_view sv, char c, sv_index_t pos);
+sv_index_t sv_find_first_of(cstring_view sv1, cstring_view sv2, sv_index_t pos);
 
 // same as sv_find_first_of, but return the char found and stores the index in
 // index pointer. returns '\0' when not found
-char sv_find_first_of_switch(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t* index);
+char sv_find_first_of_switch(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t* index);
 
 int sv_is_alpha(char c);
 int sv_is_numeric(char c);
@@ -73,31 +73,31 @@ int sv_is_alphanum(char c);
 char sv_tolower(char c);
 char sv_toupper(char c);
 
-sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos);
-sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos);
-sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos);
-sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos);
-sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos);
-sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos);
+sv_index_t sv_find_last_of_char(cstring_view sv, char c, sv_index_t pos);
+sv_index_t sv_find_last_of(cstring_view sv1, cstring_view sv2, sv_index_t pos);
+sv_index_t sv_find_first_not_of_char(cstring_view sv, char c, sv_index_t pos);
+sv_index_t sv_find_first_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos);
+sv_index_t sv_find_last_not_of_char(cstring_view sv, char c, sv_index_t pos);
+sv_index_t sv_find_last_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos);
 
-string_view sv_consume_until_first_of(string_view sv1, string_view sv2);
-string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2);
-string_view sv_consume_until_last_of(string_view sv1, string_view sv2);
-string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2);
+cstring_view sv_consume_until_first_of(cstring_view sv1, cstring_view sv2);
+cstring_view sv_consume_until_first_not_of(cstring_view sv1, cstring_view sv2);
+cstring_view sv_consume_until_last_of(cstring_view sv1, cstring_view sv2);
+cstring_view sv_consume_until_last_not_of(cstring_view sv1, cstring_view sv2);
 
-string_view sv_split_next(string_view input, string_view delim, string_view* token);
-int sv_for_split(string_view input, string_view delim, sv_for_split_callback callback, void* arg);
+cstring_view sv_split_next(cstring_view input, cstring_view delim, cstring_view* token);
+int sv_for_split(cstring_view input, cstring_view delim, sv_for_split_callback callback, void* arg);
 
-int sv_parse_int(string_view sv, int* value);
-int sv_parse_uint64(string_view sv, uint64_t* value);
-int sv_parse_float(string_view sv, float* value);
-char* sv_strdup(string_view sv);
-int sv_read_file(const char* filename, string_view* sv);
-int sv_read_file_stdin(string_view* sv);
-void sv_read_file_free(string_view sv);
+int sv_parse_int(cstring_view sv, int* value);
+int sv_parse_uint64(cstring_view sv, uint64_t* value);
+int sv_parse_float(cstring_view sv, float* value);
+char* sv_strdup(cstring_view sv);
+int sv_read_file(const char* filename, cstring_view* sv);
+int sv_read_file_stdin(cstring_view* sv);
+void sv_read_file_free(cstring_view sv);
 
 #define SV_FOR_SPLIT(token, input, delim)                           \
-  for (string_view token, sv = sv_split_next(input, delim, &token); \
+  for (cstring_view token, sv = sv_split_next(input, delim, &token); \
        !sv_is_empty(sv) || !sv_is_empty(token);                     \
        sv = sv_split_next(sv, delim, &token))
 
@@ -119,50 +119,50 @@ void sv_read_file_free(string_view sv);
     #include <string.h>
   #endif
 
-string_view sv_create(const char* data, sv_index_t length) {
-  string_view sv = {
+cstring_view sv_create(const char* data, sv_index_t length) {
+  cstring_view sv = {
       .data   = data,
       .length = length,
   };
   return sv;
 }
 
-string_view sv_create_from_cstr(const char* data) {
+cstring_view sv_create_from_cstr(const char* data) {
   return sv_create(data, strlen(data));
 }
 
-const char* sv_begin(string_view sv) { return sv.data; }
+const char* sv_begin(cstring_view sv) { return sv.data; }
 
-const char* sv_end(string_view sv) { return sv.data + (sv.length - 1); }
+const char* sv_end(cstring_view sv) { return sv.data + (sv.length - 1); }
 
-char sv_at(string_view sv, sv_index_t index) { return sv.data[index]; }
+char sv_at(cstring_view sv, sv_index_t index) { return sv.data[index]; }
 
-char sv_front(string_view sv) { return sv_begin(sv)[0]; }
+char sv_front(cstring_view sv) { return sv_begin(sv)[0]; }
 
-char sv_back(string_view sv) { return sv_end(sv)[0]; }
+char sv_back(cstring_view sv) { return sv_end(sv)[0]; }
 
-int sv_is_empty(string_view sv) { return sv.length == 0; }
+int sv_is_empty(cstring_view sv) { return sv.length == 0; }
 
-string_view sv_remove_prefix(string_view sv, sv_index_t n) {
+cstring_view sv_remove_prefix(cstring_view sv, sv_index_t n) {
   return sv_create(sv.data + n, sv.length - n);
 }
 
-string_view sv_remove_suffix(string_view sv, sv_index_t n) {
+cstring_view sv_remove_suffix(cstring_view sv, sv_index_t n) {
   return sv_create(sv.data, sv.length - n);
 }
 
-void sv_swap(string_view sv1, string_view sv2) {
-  string_view tmp = sv1;
+void sv_swap(cstring_view sv1, cstring_view sv2) {
+  cstring_view tmp = sv1;
   sv1             = sv2;
   sv2             = tmp;
 }
 
-string_view sv_substr(string_view sv, sv_index_t pos, sv_index_t count) {
+cstring_view sv_substr(cstring_view sv, sv_index_t pos, sv_index_t count) {
   if (count == SV_NPOS) count = sv.length;
   return sv_create(sv.data + pos, count < sv.length - pos ? count : sv.length - pos);
 }
 
-int sv_compare(string_view sv1, string_view sv2) {
+int sv_compare(cstring_view sv1, cstring_view sv2) {
   if (sv1.length != sv2.length) return 0;
 
   for (int i = 0; i < (int)sv1.length; i++) {
@@ -172,11 +172,11 @@ int sv_compare(string_view sv1, string_view sv2) {
   return 1;
 }
 
-int sv_starts_with_char(string_view sv1, char c) {
+int sv_starts_with_char(cstring_view sv1, char c) {
   return !sv_is_empty(sv1) && sv_front(sv1) == c;
 }
 
-int sv_starts_with(string_view sv1, string_view sv2) {
+int sv_starts_with(cstring_view sv1, cstring_view sv2) {
   if (sv2.length > sv1.length) return 0;
 
   for (int i = 0; i < (int)sv2.length; i++) {
@@ -186,7 +186,7 @@ int sv_starts_with(string_view sv1, string_view sv2) {
   return 1;
 }
 
-int sv_starts_with_insensitive(string_view sv1, string_view sv2) {
+int sv_starts_with_insensitive(cstring_view sv1, cstring_view sv2) {
   if (sv2.length > sv1.length) return 0;
 
   for (int i = 0; i < (int)sv2.length; i++) {
@@ -196,11 +196,11 @@ int sv_starts_with_insensitive(string_view sv1, string_view sv2) {
   return 1;
 }
 
-int sv_ends_with_char(string_view sv1, char c) {
+int sv_ends_with_char(cstring_view sv1, char c) {
   return !sv_is_empty(sv1) && sv_back(sv1) == c;
 }
 
-int sv_ends_with(string_view sv1, string_view sv2) {
+int sv_ends_with(cstring_view sv1, cstring_view sv2) {
   if (sv2.length > sv1.length) return 0;
 
   for (int i = 0; i < (int)sv2.length; i++) {
@@ -210,15 +210,15 @@ int sv_ends_with(string_view sv1, string_view sv2) {
   return 1;
 }
 
-int sv_contains(string_view sv1, string_view sv2) {
+int sv_contains(cstring_view sv1, cstring_view sv2) {
   return sv_find(sv1, sv2, 0) != SV_NPOS;
 }
 
-int sv_contains_insensitive(string_view sv1, string_view sv2) {
+int sv_contains_insensitive(cstring_view sv1, cstring_view sv2) {
   return sv_find_insensitive(sv1, sv2, 0) != SV_NPOS;
 }
 
-int sv_count_char(string_view sv, char c) {
+int sv_count_char(cstring_view sv, char c) {
   int count = 0;
   for (int i = 0; i < (int)sv.length; i++) {
     if (sv.data[i] == c) count++;
@@ -226,7 +226,7 @@ int sv_count_char(string_view sv, char c) {
   return count;
 }
 
-sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos) {
+sv_index_t sv_find_char(cstring_view sv1, char c, sv_index_t pos) {
   if (sv_is_empty(sv1)) return SV_NPOS;
   if (pos == SV_NPOS) pos = 0;
 
@@ -237,34 +237,34 @@ sv_index_t sv_find_char(string_view sv1, char c, sv_index_t pos) {
   return SV_NPOS;
 }
 
-sv_index_t sv_find(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) && sv_is_empty(sv1)) return 0;
   if (sv2.length > sv1.length) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = 0;
 
   for (int i = pos; i < (int)sv1.length; i++) {
-    string_view v = sv_substr(sv1, i, sv2.length);
+    cstring_view v = sv_substr(sv1, i, sv2.length);
     if (sv_starts_with(v, sv2)) return i;
   }
 
   return SV_NPOS;
 }
 
-sv_index_t sv_find_insensitive(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find_insensitive(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) && sv_is_empty(sv1)) return 0;
   if (sv2.length > sv1.length) return SV_NPOS;
   if (pos == SV_NPOS) pos = 0;
 
   for (int i = pos; i < (int)sv1.length; i++) {
-    string_view v = sv_substr(sv1, i, sv2.length);
+    cstring_view v = sv_substr(sv1, i, sv2.length);
     if (sv_starts_with_insensitive(v, sv2)) return i;
   }
 
   return SV_NPOS;
 }
 
-sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos) {
+sv_index_t sv_rfind_char(cstring_view sv1, char c, sv_index_t pos) {
   if (sv_is_empty(sv1)) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv1.length - 1;
@@ -276,25 +276,25 @@ sv_index_t sv_rfind_char(string_view sv1, char c, sv_index_t pos) {
   return SV_NPOS;
 }
 
-sv_index_t sv_rfind(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_rfind(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) && sv_is_empty(sv1)) return 0;
   if (sv2.length > sv1.length) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv1.length - 1;
 
   for (int i = pos; i >= 0; i--) {
-    string_view v = sv_substr(sv1, i, SV_NPOS);
+    cstring_view v = sv_substr(sv1, i, SV_NPOS);
     if (sv_starts_with(v, sv2)) return i;
   }
 
   return SV_NPOS;
 }
 
-sv_index_t sv_find_first_of_char(string_view sv, char c, sv_index_t pos) {
+sv_index_t sv_find_first_of_char(cstring_view sv, char c, sv_index_t pos) {
   return sv_find_char(sv, c, pos);
 }
 
-sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find_first_of(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
 
   for (int i = pos; i < (int)sv1.length; i++) {
@@ -306,7 +306,7 @@ sv_index_t sv_find_first_of(string_view sv1, string_view sv2, sv_index_t pos) {
   return SV_NPOS;
 }
 
-char sv_find_first_of_switch(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t* index) {
+char sv_find_first_of_switch(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t* index) {
   if (sv_is_empty(sv2) || sv_is_empty(sv1)) return '\0';
 
   for (int i = pos; i < (int)sv1.length; i++) {
@@ -357,11 +357,11 @@ char sv_toupper(char c) {
   return c;
 }
 
-sv_index_t sv_find_last_of_char(string_view sv, char c, sv_index_t pos) {
+sv_index_t sv_find_last_of_char(cstring_view sv, char c, sv_index_t pos) {
   return sv_rfind_char(sv, c, pos);
 }
 
-sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find_last_of(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) || sv_is_empty(sv1)) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv1.length - 1;
@@ -375,7 +375,7 @@ sv_index_t sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos) {
   return SV_NPOS;
 }
 
-sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos) {
+sv_index_t sv_find_first_not_of_char(cstring_view sv, char c, sv_index_t pos) {
   if (sv_is_empty(sv)) return SV_NPOS;
 
   for (int i = pos; i < (int)sv.length; i++) {
@@ -385,7 +385,7 @@ sv_index_t sv_find_first_not_of_char(string_view sv, char c, sv_index_t pos) {
   return SV_NPOS;
 }
 
-sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find_first_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv1) && sv_is_empty(sv2)) return 0;
 
   if (sv_is_empty(sv2)) return SV_NPOS;
@@ -401,7 +401,7 @@ sv_index_t sv_find_first_not_of(string_view sv1, string_view sv2, sv_index_t pos
   return SV_NPOS;
 }
 
-sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos) {
+sv_index_t sv_find_last_not_of_char(cstring_view sv, char c, sv_index_t pos) {
   if (sv_is_empty(sv)) return SV_NPOS;
 
   if (pos == SV_NPOS) pos = sv.length - 1;
@@ -413,7 +413,7 @@ sv_index_t sv_find_last_not_of_char(string_view sv, char c, sv_index_t pos) {
   return SV_NPOS;
 }
 
-sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos) {
+sv_index_t sv_find_last_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos) {
   if (sv_is_empty(sv2) && sv_is_empty(sv1)) return SV_NPOS;
   if (pos == 0) return SV_NPOS;
 
@@ -432,31 +432,31 @@ sv_index_t sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos)
   return SV_NPOS;
 }
 
-string_view sv_consume_until_first_of(string_view sv1, string_view sv2) {
+cstring_view sv_consume_until_first_of(cstring_view sv1, cstring_view sv2) {
   sv_index_t index = sv_find_first_of(sv1, sv2, 0);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_prefix(sv1, index);
 }
 
-string_view sv_consume_until_first_not_of(string_view sv1, string_view sv2) {
+cstring_view sv_consume_until_first_not_of(cstring_view sv1, cstring_view sv2) {
   sv_index_t index = sv_find_first_not_of(sv1, sv2, 0);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_prefix(sv1, index);
 }
 
-string_view sv_consume_until_last_of(string_view sv1, string_view sv2) {
+cstring_view sv_consume_until_last_of(cstring_view sv1, cstring_view sv2) {
   sv_index_t index = sv_find_last_of(sv1, sv2, SV_NPOS);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_suffix(sv1, sv1.length - index - 1);
 }
 
-string_view sv_consume_until_last_not_of(string_view sv1, string_view sv2) {
+cstring_view sv_consume_until_last_not_of(cstring_view sv1, cstring_view sv2) {
   sv_index_t index = sv_find_last_not_of(sv1, sv2, SV_NPOS);
   if (index == SV_NPOS) return sv_empty;
   return sv_remove_suffix(sv1, sv1.length - index - 1);
 }
 
-string_view sv_split_next(string_view input, string_view delim, string_view* token) {
+cstring_view sv_split_next(cstring_view input, cstring_view delim, cstring_view* token) {
   *token = sv_substr(input, 0, sv_find_first_of(input, delim, 0));
 
   if (sv_compare(input, *token)) return sv_empty;
@@ -470,7 +470,7 @@ string_view sv_split_next(string_view input, string_view delim, string_view* tok
   return sv_remove_prefix(input, token->length);
 }
 
-int sv_for_split(string_view input, string_view delim, sv_for_split_callback callback, void* arg) {
+int sv_for_split(cstring_view input, cstring_view delim, sv_for_split_callback callback, void* arg) {
   SV_FOR_SPLIT(token, input, delim) {
     int ret = callback(token, arg);
     if (!ret) return ret;
@@ -478,7 +478,7 @@ int sv_for_split(string_view input, string_view delim, sv_for_split_callback cal
   return 1;
 }
 
-int sv_parse_int(string_view sv, int* value) {
+int sv_parse_int(cstring_view sv, int* value) {
   if (sv_is_empty(sv)) return 0;
   if (sv.length > 11) // An int can hold up to 10 digits (+1 for potential '-' sign)
     return 0;
@@ -528,7 +528,7 @@ int sv_parse_int(string_view sv, int* value) {
   return 1;
 }
 
-int sv_parse_uint64(string_view sv, uint64_t* value) {
+int sv_parse_uint64(cstring_view sv, uint64_t* value) {
   if (sv_is_empty(sv)) return 0;
   if (sv.length > 20) // A uint64_t can hold up to 20 digits.
     return 0;
@@ -585,7 +585,7 @@ static float sv_pow(float base, float exponent) {
   return result;
 }
 
-int sv_parse_float(string_view sv, float* value) {
+int sv_parse_float(cstring_view sv, float* value) {
   if (sv_is_empty(sv)) return 0;
   int negative = 0;
   float num    = 0.0f;
@@ -697,7 +697,7 @@ end:
   return 1;
 }
 
-char* sv_strdup(string_view sv) {
+char* sv_strdup(cstring_view sv) {
   char* str = (char*)malloc(sv.length + 1);
   if (!str) return NULL;
   memcpy(str, sv.data, sv.length + 1);
@@ -705,7 +705,7 @@ char* sv_strdup(string_view sv) {
   return str;
 }
 
-int sv_read_file(const char* filename, string_view* sv) {
+int sv_read_file(const char* filename, cstring_view* sv) {
   FILE* fh = fopen(filename, "rb");
   if (fh == NULL) {
     return 0;
@@ -741,7 +741,7 @@ int sv_read_file(const char* filename, string_view* sv) {
   return 1;
 }
 
-int sv_read_file_stdin(string_view* sv) {
+int sv_read_file_stdin(cstring_view* sv) {
   size_t capacity = 100;
   size_t index    = 0;
 
@@ -789,7 +789,7 @@ int sv_read_file_stdin(string_view* sv) {
   return 1;
 }
 
-void sv_read_file_free(string_view sv) { free((char*)sv.data); }
+void sv_read_file_free(cstring_view sv) { free((char*)sv.data); }
 
 #endif
 

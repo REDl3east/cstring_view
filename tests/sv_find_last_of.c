@@ -6,8 +6,8 @@
 void print_check();
 void print_x();
 
-int test_sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
-int test_sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_find_last_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
+int test_sv_find_last_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected);
 
 int main() {
   if (!test_sv_find_last_of(svl("123456"), svl("12"), 3, 1)) return 1;
@@ -44,7 +44,7 @@ int main() {
   return 0;
 }
 
-int test_sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_find_last_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find_last_of(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {
@@ -72,7 +72,7 @@ int test_sv_find_last_of(string_view sv1, string_view sv2, sv_index_t pos, sv_in
   return 1;
 }
 
-int test_sv_find_last_not_of(string_view sv1, string_view sv2, sv_index_t pos, sv_index_t expected) {
+int test_sv_find_last_not_of(cstring_view sv1, cstring_view sv2, sv_index_t pos, sv_index_t expected) {
   sv_index_t tmp = sv_find_last_not_of(sv1, sv2, pos);
 
   if (expected == SV_NPOS && tmp == SV_NPOS) {

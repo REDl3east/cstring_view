@@ -8,7 +8,7 @@
 void print_check();
 void print_x();
 
-int test_sv_substr(string_view sv1, sv_index_t pos, sv_index_t count, string_view expected);
+int test_sv_substr(cstring_view sv1, sv_index_t pos, sv_index_t count, cstring_view expected);
 
 int main() {
   if (!test_sv_substr(svl(""), 0, 0, svl(""))) return 1;
@@ -28,8 +28,8 @@ int main() {
   return 0;
 }
 
-int test_sv_substr(string_view sv1, sv_index_t pos, sv_index_t count, string_view expected) {
-  string_view tmp = sv_substr(sv1, pos, count);
+int test_sv_substr(cstring_view sv1, sv_index_t pos, sv_index_t count, cstring_view expected) {
+  cstring_view tmp = sv_substr(sv1, pos, count);
   if (sv_compare(expected, tmp)) {
     print_check();
     printf("'" sv_fmt "' == '" sv_fmt "'\n", sv_arg(tmp), sv_arg(expected));

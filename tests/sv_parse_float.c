@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-int test_sv_parse_float(string_view input, int will_fail, float expected);
+int test_sv_parse_float(cstring_view input, int will_fail, float expected);
 int float_equals(float a, float b);
 
 void print_check();
@@ -192,7 +192,7 @@ int float_equals(float a, float b) {
   return ((a - b) < EPSILON) && ((b - a) < EPSILON);
 }
 
-int test_sv_parse_float(string_view input, int will_fail, float expected) {
+int test_sv_parse_float(cstring_view input, int will_fail, float expected) {
   float inputf;
   if (!sv_parse_float(input, &inputf)) {
     if (will_fail) {

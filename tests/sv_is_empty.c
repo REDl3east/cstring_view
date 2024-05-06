@@ -7,8 +7,8 @@
 
 void print_check();
 void print_x();
-int test_is_empty(string_view sv);
-int test_is_not_empty(string_view sv);
+int test_is_empty(cstring_view sv);
+int test_is_not_empty(cstring_view sv);
 
 int main() {
   if (!test_is_empty(svl(""))) return 1;
@@ -38,7 +38,7 @@ int main() {
   return 0;
 }
 
-int test_is_empty(string_view sv) {
+int test_is_empty(cstring_view sv) {
   if (sv_is_empty(sv)) {
     print_check();
     return 1;
@@ -48,7 +48,7 @@ int test_is_empty(string_view sv) {
   }
 }
 
-int test_is_not_empty(string_view sv) {
+int test_is_not_empty(cstring_view sv) {
   if (!sv_is_empty(sv)) {
     print_check();
     return 1;

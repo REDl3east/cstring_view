@@ -6,7 +6,7 @@
 #include <string.h>
 
 int main() {
-  string_view sv;
+  cstring_view sv;
 
   if (!sv_read_file_stdin(&sv)) {
     fprintf(stderr, "sv_read_file_stdin failed\n");

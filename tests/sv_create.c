@@ -7,10 +7,10 @@
 
 void print_check();
 void print_x();
-int test_sv_create(string_view sv1, string_view sv2);
+int test_sv_create(cstring_view sv1, cstring_view sv2);
 
 int main() {
-  string_view sv;
+  cstring_view sv;
   const char* cstr;
 
   sv = sv_create("hello world", 11);
@@ -71,7 +71,7 @@ void print_x() {
   printf("[x] ");
 }
 
-int test_sv_create(string_view sv1, string_view sv2) {
+int test_sv_create(cstring_view sv1, cstring_view sv2) {
   if (sv_compare(sv1, sv2)) {
     print_check();
     printf("'" sv_fmt "' == '" sv_fmt "'\n", sv_arg(sv1), sv_arg(sv2));
