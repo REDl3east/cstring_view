@@ -93,6 +93,7 @@ int sv_parse_uint64(string_view sv, uint64_t* value);
 int sv_parse_float(string_view sv, float* value);
 char* sv_strdup(string_view sv);
 int sv_read_file(const char* filename, string_view* sv);
+int sv_read_file_stdin(string_view* sv);
 void sv_read_file_free(string_view sv);
 
 #define SV_FOR_SPLIT(token, input, delim)                           \
@@ -737,6 +738,54 @@ int sv_read_file(const char* filename, string_view* sv) {
   sv->data = b;
 
   fclose(fh);
+  return 1;
+}
+
+int sv_read_file_stdin(string_view* sv) {
+  size_t capacity = 100;
+  size_t index    = 0;
+
+  char* b = malloc(capacity * sizeof(char));
+  char* tmp_b;
+
+  if (b == NULL) {
+    return 0;
+  }
+  int c = fgetc(stdin);
+
+  while (1) {
+    if (feof(stdin)) break;
+    if (c == EOF) break;
+
+    b[index++] = c;
+
+    if (index == capacity) {
+      capacity *= 2;
+      tmp_b = realloc(b, capacity * sizeof(char));
+      if (tmp_b == NULL) {
+        free(b);
+        return 0;
+      }
+      b = tmp_b;
+    }
+    c = fgetc(stdin);
+  }
+
+  if (index == 0) {
+    free(b);
+    return 0;
+  }
+
+  tmp_b = realloc(b, index * sizeof(char));
+  if (tmp_b == NULL) {
+    free(b);
+    return 0;
+  }
+  b = tmp_b;
+
+  sv->data   = b;
+  sv->length = index;
+
   return 1;
 }
 
