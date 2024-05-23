@@ -90,6 +90,7 @@ int sv_for_split(cstring_view input, cstring_view delim, sv_for_split_callback c
 
 int sv_parse_int(cstring_view sv, int* value);
 int sv_parse_uint64(cstring_view sv, uint64_t* value);
+int sv_parse_uint32(cstring_view sv, uint32_t* value);
 int sv_parse_uint8(cstring_view sv, uint8_t* value);
 int sv_parse_float(cstring_view sv, float* value);
 char* sv_strdup(cstring_view sv);
@@ -552,6 +553,47 @@ int sv_parse_uint64(cstring_view sv, uint64_t* value) {
       uint64_t limit       = ((uint64_t)-1 / 10);
       uint64_t limit_digit = ((uint64_t)-1 % 10);
       uint64_t digit       = sv.data[i] - '0';
+
+      // Check for overflow.
+      if (tmp > limit || (tmp == limit && digit > limit_digit))
+        return 0; // Overflow would occur if we added this digit.
+
+      tmp = tmp * 10 + digit;
+    }
+  } else { // No overflow possible
+    for (size_t i = 0; i < sv.length; ++i) {
+      tmp = tmp * 10 + (sv_at(sv, i) - '0');
+    }
+  }
+
+  *value = tmp;
+
+  return 1;
+}
+
+int sv_parse_uint32(cstring_view sv, uint32_t* value) {
+  if (sv_is_empty(sv)) return 0;
+  if (sv.length > 10) // A uint64_t can hold up to 10 digits.
+    return 0;
+
+  if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+
+  uint32_t tmp = 0;
+
+  // Parse with overflow checking if the number has 10 digits
+  if (sv.length == 10) {
+    size_t i = 0;
+
+    // Parse without overflow checking until the 19th digit.
+    for (; i < sv.length && i < 9; ++i) {
+      tmp = tmp * 10 + (sv.data[i] - '0');
+    }
+
+    // Parse the remaining digits with overflow checking.
+    for (; i < sv.length; ++i) {
+      uint32_t limit       = ((uint32_t)-1 / 10);
+      uint32_t limit_digit = ((uint32_t)-1 % 10);
+      uint32_t digit       = sv.data[i] - '0';
 
       // Check for overflow.
       if (tmp > limit || (tmp == limit && digit > limit_digit))

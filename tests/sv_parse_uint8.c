@@ -29,7 +29,7 @@ int main() {
   TEST_PARSE_UINT8(0);
 
   TEST_PARSE_UINT8_FAIL("256");  // overflow
-  TEST_PARSE_UINT8_FAIL("-123"); // uint64 can't be negative
+  TEST_PARSE_UINT8_FAIL("-123"); // uint8_t can't be negative
   TEST_PARSE_UINT8_FAIL("-123   ");
   TEST_PARSE_UINT8_FAIL("    -123");
   TEST_PARSE_UINT8_FAIL("    -123   s");
