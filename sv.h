@@ -90,15 +90,16 @@ int sv_for_split(cstring_view input, cstring_view delim, sv_for_split_callback c
 
 int sv_parse_int(cstring_view sv, int* value);
 int sv_parse_uint64(cstring_view sv, uint64_t* value);
+int sv_parse_uint8(cstring_view sv, uint8_t* value);
 int sv_parse_float(cstring_view sv, float* value);
 char* sv_strdup(cstring_view sv);
 int sv_read_file(const char* filename, cstring_view* sv);
 int sv_read_file_stdin(cstring_view* sv);
 void sv_read_file_free(cstring_view sv);
 
-#define SV_FOR_SPLIT(token, input, delim)                           \
+#define SV_FOR_SPLIT(token, input, delim)                            \
   for (cstring_view token, sv = sv_split_next(input, delim, &token); \
-       !sv_is_empty(sv) || !sv_is_empty(token);                     \
+       !sv_is_empty(sv) || !sv_is_empty(token);                      \
        sv = sv_split_next(sv, delim, &token))
 
 #ifdef __cplusplus
@@ -153,8 +154,8 @@ cstring_view sv_remove_suffix(cstring_view sv, sv_index_t n) {
 
 void sv_swap(cstring_view sv1, cstring_view sv2) {
   cstring_view tmp = sv1;
-  sv1             = sv2;
-  sv2             = tmp;
+  sv1              = sv2;
+  sv2              = tmp;
 }
 
 cstring_view sv_substr(cstring_view sv, sv_index_t pos, sv_index_t count) {
@@ -569,6 +570,47 @@ int sv_parse_uint64(cstring_view sv, uint64_t* value) {
   return 1;
 }
 
+int sv_parse_uint8(cstring_view sv, uint8_t* value) {
+  if (sv_is_empty(sv)) return 0;
+  if (sv.length > 3) // A uint8_t can hold up to 3 digits.
+    return 0;
+
+  if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
+
+  uint8_t tmp = 0;
+
+  // Parse with overflow checking if the number has 3 digits
+  if (sv.length == 3) {
+    size_t i = 0;
+
+    // Parse without overflow checking until the 2nd digit.
+    for (; i < sv.length && i < 2; ++i) {
+      tmp = tmp * 10 + (sv.data[i] - '0');
+    }
+
+    // Parse the remaining digits with overflow checking.
+    for (; i < sv.length; ++i) {
+      uint8_t limit       = ((uint8_t)-1 / 10);
+      uint8_t limit_digit = ((uint8_t)-1 % 10);
+      uint8_t digit       = sv.data[i] - '0';
+
+      // Check for overflow.
+      if (tmp > limit || (tmp == limit && digit > limit_digit))
+        return 0; // Overflow would occur if we added this digit.
+
+      tmp = tmp * 10 + digit;
+    }
+  } else { // No overflow possible
+    for (size_t i = 0; i < sv.length; ++i) {
+      tmp = tmp * 10 + (sv_at(sv, i) - '0');
+    }
+  }
+
+  *value = tmp;
+
+  return 1;
+}
+
 static float sv_pow(float base, float exponent) {
   float result = 1.0;
 
@@ -791,6 +833,6 @@ int sv_read_file_stdin(cstring_view* sv) {
 
 void sv_read_file_free(cstring_view sv) { free((char*)sv.data); }
 
-#endif
+#endif // #ifdef SV_IMPLEMENTATION
 
-#endif
+#endif // _SV_H_
