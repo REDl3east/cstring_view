@@ -459,16 +459,24 @@ cstring_view sv_consume_until_last_not_of(cstring_view sv1, cstring_view sv2) {
 }
 
 cstring_view sv_split_next(cstring_view input, cstring_view delim, cstring_view* token) {
-  *token = sv_substr(input, 0, sv_find_first_of(input, delim, 0));
+  // trim left delims
+  input = sv_consume_until_first_not_of(input, delim);
 
-  if (sv_compare(input, *token)) return sv_empty;
-
-  while (sv_is_empty(*token)) {
-    input  = sv_remove_prefix(input, 1);
-    *token = sv_substr(input, 0, sv_find_first_of(input, delim, 0));
-    if (sv_compare(input, *token)) return sv_empty;
+  // input was all delims
+  if (sv_is_empty(input)) {
+    *token = sv_empty;
+    return sv_empty;
   }
 
+  sv_index_t pos = sv_find_first_of(input, delim, 0);
+
+  // no delim found
+  if (pos == SV_NPOS) {
+    *token = input;
+    return sv_empty;
+  }
+
+  *token = sv_substr(input, 0, pos);
   return sv_remove_prefix(input, token->length);
 }
 
