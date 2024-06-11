@@ -893,7 +893,7 @@ int sv_read_file_stdin(cstring_view* sv) {
   size_t capacity = 100;
   size_t index    = 0;
 
-  char* b = malloc(capacity * sizeof(char));
+  char* b = (char*)malloc(capacity * sizeof(char));
   char* tmp_b;
 
   if (b == NULL) {
@@ -909,7 +909,7 @@ int sv_read_file_stdin(cstring_view* sv) {
 
     if (index == capacity) {
       capacity *= 2;
-      tmp_b = realloc(b, capacity * sizeof(char));
+      tmp_b = (char*)realloc(b, capacity * sizeof(char));
       if (tmp_b == NULL) {
         free(b);
         return 0;
@@ -924,7 +924,7 @@ int sv_read_file_stdin(cstring_view* sv) {
     return 0;
   }
 
-  tmp_b = realloc(b, index * sizeof(char));
+  tmp_b = (char*)realloc(b, index * sizeof(char));
   if (tmp_b == NULL) {
     free(b);
     return 0;
