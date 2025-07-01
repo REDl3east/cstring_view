@@ -13,7 +13,7 @@
 #define svc(cstr)         sv_create_from_cstr(cstr)
 #define sv_empty          svl("")
 #define sv_fmt            "%.*s"
-#define sv_arg(sv)        (int)sv.length, sv.data
+#define sv_arg(sv)        (int)(sv).length, (sv).data
 
 typedef unsigned long int sv_index_t;
 
