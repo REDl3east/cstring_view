@@ -41,6 +41,7 @@ cstring_view sv_remove_suffix(cstring_view sv, sv_index_t n);
 void sv_swap(cstring_view sv1, cstring_view sv2);
 cstring_view sv_substr(cstring_view sv, sv_index_t pos, sv_index_t count);
 int sv_compare(cstring_view sv1, cstring_view sv2);
+int sv_compare_insensitive(cstring_view sv1, cstring_view sv2);
 int sv_starts_with(cstring_view sv1, cstring_view sv2);
 int sv_starts_with_insensitive(cstring_view sv1, cstring_view sv2);
 
@@ -175,6 +176,16 @@ int sv_compare(cstring_view sv1, cstring_view sv2) {
 
   for (int i = 0; i < (int)sv1.length; i++) {
     if (sv1.data[i] != sv2.data[i]) return 0;
+  }
+
+  return 1;
+}
+
+int sv_compare_insensitive(cstring_view sv1, cstring_view sv2) {
+  if (sv1.length != sv2.length) return 0;
+
+  for (int i = 0; i < (int)sv1.length; i++) {
+    if (sv_tolower(sv1.data[i]) != sv_tolower(sv2.data[i])) return 0;
   }
 
   return 1;
