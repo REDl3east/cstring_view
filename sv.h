@@ -137,7 +137,7 @@ cstring_view sv_create(const char* data, sv_index_t length) {
 }
 
 cstring_view sv_create_from_cstr(const char* data) {
-  return sv_create(data, strlen(data));
+  return sv_create(data, (sv_index_t)strlen(data));
 }
 
 const char* sv_begin(cstring_view sv) { return sv.data; }
@@ -595,7 +595,7 @@ int sv_parse_int(cstring_view sv, int* value) {
       tmp = tmp * 10 + digit;
     }
   } else { // No overflow possible
-    for (size_t i = 0; i < sv.length; ++i) {
+    for (sv_index_t i = 0; i < sv.length; ++i) {
       tmp = tmp * 10 + (sv_at(sv, i) - '0');
     }
   }
@@ -636,7 +636,7 @@ int sv_parse_uint64(cstring_view sv, uint64_t* value) {
       tmp = tmp * 10 + digit;
     }
   } else { // No overflow possible
-    for (size_t i = 0; i < sv.length; ++i) {
+    for (sv_index_t i = 0; i < sv.length; ++i) {
       tmp = tmp * 10 + (sv_at(sv, i) - '0');
     }
   }
@@ -657,7 +657,7 @@ int sv_parse_uint32(cstring_view sv, uint32_t* value) {
 
   // Parse with overflow checking if the number has 10 digits
   if (sv.length == 10) {
-    size_t i = 0;
+    sv_index_t i = 0;
 
     // Parse without overflow checking until the 19th digit.
     for (; i < sv.length && i < 9; ++i) {
@@ -677,7 +677,7 @@ int sv_parse_uint32(cstring_view sv, uint32_t* value) {
       tmp = tmp * 10 + digit;
     }
   } else { // No overflow possible
-    for (size_t i = 0; i < sv.length; ++i) {
+    for (sv_index_t i = 0; i < sv.length; ++i) {
       tmp = tmp * 10 + (sv_at(sv, i) - '0');
     }
   }
@@ -698,7 +698,7 @@ int sv_parse_uint8(cstring_view sv, uint8_t* value) {
 
   // Parse with overflow checking if the number has 3 digits
   if (sv.length == 3) {
-    size_t i = 0;
+    sv_index_t i = 0;
 
     // Parse without overflow checking until the 2nd digit.
     for (; i < sv.length && i < 2; ++i) {
@@ -718,7 +718,7 @@ int sv_parse_uint8(cstring_view sv, uint8_t* value) {
       tmp = tmp * 10 + digit;
     }
   } else { // No overflow possible
-    for (size_t i = 0; i < sv.length; ++i) {
+    for (sv_index_t i = 0; i < sv.length; ++i) {
       tmp = tmp * 10 + (sv_at(sv, i) - '0');
     }
   }
@@ -773,14 +773,14 @@ int sv_parse_float(cstring_view sv, float* value) {
       if (pos2 == SV_NPOS) { // no frac and no expon
         if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
 
-        for (size_t i = 0; i < sv.length; ++i) {
+        for (sv_index_t i = 0; i < sv.length; ++i) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
         goto end;
       } else { // no frac, but expon
         if (sv_find_first_not_of(sv_substr(sv, 0, pos2), svl("0123456789"), 0) != SV_NPOS) return 0;
 
-        for (size_t i = 0; i < pos2; ++i) {
+        for (sv_index_t i = 0; i < pos2; ++i) {
           num = num * 10 + (sv_at(sv, i) - '0');
         }
 
@@ -790,7 +790,7 @@ int sv_parse_float(cstring_view sv, float* value) {
     } else { // we found '.'
       if (sv_find_first_not_of(sv_substr(sv, 0, pos1), svl("0123456789"), 0) != SV_NPOS) return 0;
 
-      for (size_t i = 0; i < pos1; ++i) {
+      for (sv_index_t i = 0; i < pos1; ++i) {
         num = num * 10 + (sv_at(sv, i) - '0');
       }
 
@@ -802,14 +802,14 @@ int sv_parse_float(cstring_view sv, float* value) {
     return 0;
   }
 
-frac : {
+frac: {
   if (sv_is_empty(sv)) goto end;
   float fraction = 0.0f;
   float denom    = 1.0f;
   sv_index_t pos = sv_find_first_of(sv, svl("eE"), 0);
   if (pos == SV_NPOS) { // fraction only
     if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
-    for (size_t i = 0; i < sv.length; ++i) {
+    for (sv_index_t i = 0; i < sv.length; ++i) {
       fraction = fraction * 10 + (sv_at(sv, i) - '0');
       denom *= 10.0f;
     }
@@ -818,7 +818,7 @@ frac : {
     goto end;
   } else { // fraction and exponent
     if (sv_find_first_not_of(sv_substr(sv, 0, pos), svl("0123456789"), 0) != SV_NPOS) return 0;
-    for (size_t i = 0; i < pos; ++i) {
+    for (sv_index_t i = 0; i < pos; ++i) {
       fraction = fraction * 10 + (sv_at(sv, i) - '0');
       denom *= 10.0f;
     }
@@ -828,7 +828,7 @@ frac : {
     goto expon;
   }
 }
-expon : {
+expon: {
   if (sv_is_empty(sv)) return 0; // exponet must have something after it
 
   int negative_expon = 0;
@@ -843,7 +843,7 @@ expon : {
 
   if (sv_find_first_not_of(sv, svl("0123456789"), 0) != SV_NPOS) return 0;
   float exponent = 0.0f;
-  for (size_t i = 0; i < sv.length; ++i) {
+  for (sv_index_t i = 0; i < sv.length; ++i) {
     exponent = exponent * 10 + (sv_at(sv, i) - '0');
   }
 
@@ -901,8 +901,8 @@ int sv_read_file(const char* filename, cstring_view* sv) {
 }
 
 int sv_read_file_stdin(cstring_view* sv) {
-  size_t capacity = 100;
-  size_t index    = 0;
+  sv_index_t capacity = 100;
+  sv_index_t index    = 0;
 
   char* b = (char*)malloc(capacity * sizeof(char));
   char* tmp_b;
